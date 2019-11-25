@@ -1,17 +1,4 @@
 <?php
-/**
- * homepage.php
- *
- * display the check primes application homepage
- *
- * allows the user to enter a value for testing if prime
- *
- * Author: CF Ingrams
- * Email: <clinton@cfing.co.uk>
- * Date: 18/10/2015
- *
- * @author CF Ingrams <clinton@cfing.co.uk>
- */
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
@@ -37,3 +24,18 @@ $app->get('/', function(Request $request, Response $response)
             'sid' => $sid,
         ]);
 })->setName('homepage');
+
+function getMessages($app)
+{
+    $messages_result = [];
+    $soap_wrapper = $app->getContainer()->get('soapWrapper');
+
+    $countrydetails_model = $app->getContainer()->get('countryDetailsModel');
+    $countrydetails_model->setSoapWrapper($soap_wrapper);
+
+    $countrydetails_model->retrieveCountryNames();
+    $messages_result = $countrydetails_model->getResult();
+
+    return $country_detail_result;
+
+}
