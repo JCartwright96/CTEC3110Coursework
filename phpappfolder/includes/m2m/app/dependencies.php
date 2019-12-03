@@ -15,3 +15,10 @@ $container['view'] = function ($container) {
 
     return $view;
 };
+
+
+$container['soapWrapper'] = function ($container) {
+    $retrieve_message_data_model = new \M2m\SoapWrapper();
+    return $retrieve_message_data_model;
+};
+

@@ -7,11 +7,14 @@ $app->get('/', function(Request $request, Response $response)
 {
     $sid = session_id();
 
+    $messages_link = $this->router->pathFor('messages');
+
     return $this->view->render($response,
         'homepage.html.twig',
         [
             'css_path' => CSS_PATH,
             'app_url' => APP_URL,
+            'messages_link' => $messages_link,
             'landing_page' => $_SERVER["SCRIPT_NAME"],
             'action' => 'storesessiondetails',
             'initial_input_box_value' => null,
@@ -25,17 +28,3 @@ $app->get('/', function(Request $request, Response $response)
         ]);
 })->setName('homepage');
 
-function getMessages($app)
-{
-    $messages_result = [];
-    $soap_wrapper = $app->getContainer()->get('soapWrapper');
-
-    $countrydetails_model = $app->getContainer()->get('countryDetailsModel');
-    $countrydetails_model->setSoapWrapper($soap_wrapper);
-
-    $countrydetails_model->retrieveCountryNames();
-    $messages_result = $countrydetails_model->getResult();
-
-    return $country_detail_result;
-
-}

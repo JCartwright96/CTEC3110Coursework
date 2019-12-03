@@ -4,5 +4,10 @@
         "slim/twig-view": "^2.5",
         "monolog/monolog": "^2.0",
         "twbs/bootstrap": "^4.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "M2m\\": "m2m/app/src"
+        }
     }
 }
