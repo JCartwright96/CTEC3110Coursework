@@ -1,5 +1,5 @@
 <?php
-$app_url = dirname($_SERVER['SCRIPT_NAME']);
+$app_url = dirname($_SERVER['SERVER_NAME']);
 $css_path = $app_url . '/css/m2m.css';
 define('CSS_PATH', $css_path);
 define('APP_URL', $app_url);
