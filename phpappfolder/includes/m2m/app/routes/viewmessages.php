@@ -2,6 +2,7 @@
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use Doctrine\DBAL\DriverManager;
 
 $app->get('/messages', function(Request $request, Response $response) use ($app)
 {
@@ -9,11 +10,29 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
 
     $messages = peekMessages($app);
 
+
     foreach ($messages as $message) {
         $message = simplexml_load_string($message);
-        var_dump($message);
+        if (isset($message->message)) {
+            if (isJson($message->message)) {
+                $message = (string)$message->message;
+                $message = json_decode($message, true);
+                if( isset( $message['18-3110-AF'] ) ){
+                    //THIS IS OUR MESSAGE
+                    var_dump($message['18-3110-AF']);
+
+                    $cleaned_parameters = [
+                        'message' => $message
+                    ];
+
+                    //storeMessageDetails($app, $cleaned_parameters);
+                }
+            }
+        }
     }
 
+
+    //$storage_result = storeMessageDetails($app, $cleaned_parameters, $hashed_password);
 
 
     return $this->view->render($response,
@@ -60,4 +79,49 @@ function peekMessages($app)
     }
 
     return $message_data;
+}
+
+/**
+ *
+ * Uses the Doctrine QueryBuilder API to store the sanitised user data.
+ *
+ * @param $app
+ * @param array $cleaned_parameters
+ * @param string $hashed_password
+ * @return array
+ * @throws \Doctrine\DBAL\DBALException
+ */
+function storeMessageDetails($app, array $cleaned_parameters): string
+{
+    $storage_result = [];
+    $store_result = '';
+
+    //var_dump('asd');
+    //die();
+
+    $database_connection_settings = $app->getContainer()->get('doctrine_settings');
+    //var_dump($database_connection_settings);
+    //die();
+    $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
+    $database_connection = DriverManager::getConnection($database_connection_settings);
+
+    //$queryBuilder = $database_connection->createQueryBuilder();
+
+    //$storage_result = $doctrine_queries::queryStoreMessageData($queryBuilder, $cleaned_parameters);
+    $storage_result = 1;
+    if ($storage_result['outcome'] == 1)
+    {
+        $store_result = 'User data was successfully stored using the SQL query: ' . $storage_result['sql_query'];
+    }
+    else
+    {
+        $store_result = 'There appears to have been a problem when saving your details.  Please try again later.';
+
+    }
+    return $store_result;
+}
+
+function isJson($string) {
+    json_decode($string);
+    return (json_last_error() == JSON_ERROR_NONE);
 }

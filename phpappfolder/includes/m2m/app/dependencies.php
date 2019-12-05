@@ -22,3 +22,12 @@ $container['soapWrapper'] = function ($container) {
     return $retrieve_message_data_model;
 };
 
+$container['doctrineSqlQueries'] = function ($container) {
+    $doctrine_sql_queries = new \M2m\DoctrineSqlQueries();
+    return $doctrine_sql_queries;
+};
+
+$container['xmlParser'] = function ($container) {
+    $model = new \M2m\XmlParser();
+    return $model;
+};
