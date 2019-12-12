@@ -10,25 +10,26 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
 
     $messages = peekMessages($app);
 
-
     foreach ($messages as $message) {
-        $message = simplexml_load_string($message);
-        if (isset($message->message)) {
-            if (isJson($message->message)) {
-                $message = (string)$message->message;
-                $message = json_decode($message, true);
-                if( isset( $message['18-3110-AF'] ) ){
-                    //THIS IS OUR MESSAGE
-                    var_dump($message['18-3110-AF']);
+        libxml_use_internal_errors(true);
 
-                    $cleaned_parameters = [
-                        'message' => $message
-                    ];
 
-                    //storeMessageDetails($app, $cleaned_parameters);
+            $message = simplexml_load_string($message);
+            if (isset($message->message)) {
+                if (isJson($message->message)) {
+                    $message = (string)$message->message;
+                    $message = json_decode($message, true);
+                    if( isset( $message['18-3110-AF'] ) ){
+                        //THIS IS OUR MESSAGE
+                        var_dump($message['18-3110-AF']);
+
+
+
+                        //storeMessageDetails($app, $cleaned_parameters);
+                    }
                 }
             }
-        }
+
     }
 
 
@@ -69,7 +70,7 @@ function peekMessages($app)
             [
                 'username' => '19_17234645',
                 'password' => 'Password1234',
-                'count' => (int)20,
+                'count' => (int)100,
                 'deviceMsisdn' => '',
                 'countryCode' => ''
             ];

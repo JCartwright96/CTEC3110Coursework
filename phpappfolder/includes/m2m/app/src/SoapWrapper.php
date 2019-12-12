@@ -64,7 +64,11 @@ class SoapWrapper
                 $soap_server_get_quote_result = $exception;
             }
         }
+
+        //var_dump($data);
+        //die();
         //var_dump($raw_xml);
+        //die();
         //$LastTradeDateTime = $raw_xml->LastTradeDateTime;
         //var_dump($LastTradeDateTime);
         return $data;
