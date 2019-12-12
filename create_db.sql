@@ -31,7 +31,7 @@ CREATE TABLE `user_data` (
 -- Table structure for table `message_data`
 --
 CREATE TABLE `message_data` (
-  `message_id` int(10) unsigned NOT NULL AUTO INCREMENT,
+  `message_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `phone_number` int(15) NOT NULL,
   `switch_01` BOOLEAN NOT NULL,
   `switch_02` BOOLEAN NOT NULL,
