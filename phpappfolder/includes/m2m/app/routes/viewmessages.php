@@ -17,12 +17,14 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
             $message = simplexml_load_string($message);
             if (isset($message->message)) {
                 if (isJson($message->message)) {
-                    $message = (string)$message->message;
-                    $message = json_decode($message, true);
-                    if( isset( $message['18-3110-AF'] ) ){
+                    $message_array = (string)$message->message;
+                    $message_array = json_decode($message_array, true);
+                    if( isset( $message_array['18-3110-AF'] ) ){
                         //THIS IS OUR MESSAGE
-                        var_dump($message['18-3110-AF']);
+                        $message_array['18-3110-AF']['source'] = (string)$message->sourcemsisdn;
+                        $message_array['18-3110-AF']['time'] = (string)$message->receivedtime;
 
+                        var_dump($message_array);
 
 
                         //storeMessageDetails($app, $cleaned_parameters);
