@@ -33,4 +33,11 @@ $container['xmlParser'] = function ($container) {
     return $model;
 };
 
+$container['validator'] = function ($container) {
+    $validator = new \M2m\Validator();
+    return $validator;
+};
+
+
+
 
