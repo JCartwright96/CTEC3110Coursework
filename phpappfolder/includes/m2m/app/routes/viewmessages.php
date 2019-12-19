@@ -22,8 +22,11 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
                         //THIS IS OUR MESSAGE
                         $message_array['18-3110-AF']['phone'] = (string)$message->sourcemsisdn;
                         $message_array['18-3110-AF']['time'] = (string)$message->receivedtime;
-
+                        
                         echo (storeMessageDetails($app, $message_array['18-3110-AF']));
+                        
+//                      $cleaned_parameters = cleanupMessageData($app, $message_array['18-3110-AF']);
+//                      echo storeMessageDetails($app, $cleaned_parameters);
                     }
                 }
             }
@@ -115,6 +118,45 @@ function storeMessageDetails($app, array $cleaned_parameters): string
 
     }
     return $store_result;
+}
+
+/**
+ *  Takes the tainted input from the $message_array
+ *  Uses the corresponding validator and returns each parameter in a cleaned array. 
+ * 
+ * @param $app
+ * @param $tainted_parameters $message_array
+ * @return array $cleaned parameters
+ */
+
+function cleanupMessageData($app, $tainted_parameters)
+{
+    $cleaned_parameters = [];
+    $validator = $app->getContainer()->get('validator');
+
+    $tainted_phone_number = $tainted_parameters['phone'];
+    $tainted_s1 = $tainted_parameters['switch_1'];
+    $tainted_s2 = $tainted_parameters['switch_2'];
+    $tainted_s3 = $tainted_parameters['switch_3'];
+    $tainted_s4 = $tainted_parameters['switch_4'];
+    $tainted_fan = $tainted_parameters['fan'];
+    $tainted_heater = $tainted_parameters['heater'];
+    $tainted_keypad = $tainted_parameters['keypad'];
+
+    // Cleaning each of the tainted parameters, and adding them to the cleaned array
+    $cleaned_parameters['phone'] = $validator->validateInt($tainted_phone_number);
+    $cleaned_parameters['switch_1'] = $validator->validateBool($tainted_s1);
+    $cleaned_parameters['switch_2'] = $validator->validateBool($tainted_s2);
+    $cleaned_parameters['switch_3'] = $validator->validateBool($tainted_s3);
+    $cleaned_parameters['switch_4'] = $validator->validateBool($tainted_s4);
+    $cleaned_parameters['fan'] = $validator->sanitiseString($tainted_fan);
+    $cleaned_parameters['heater'] = $validator->validateInt($tainted_heater);
+    $cleaned_parameters['keypad'] = $validator->validateInt($tainted_keypad);
+
+    // Received time is returned in the clean parameters but not yet used/stored
+    $cleaned_parameters['received_time'] = $tainted_parameters['time'];
+
+    return $cleaned_parameters;
 }
 
 function isJson($string) {
