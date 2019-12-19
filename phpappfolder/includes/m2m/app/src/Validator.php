@@ -18,5 +18,29 @@ class Validator
         }
         return $sanitised_string;
     }
+    
+    public function validateInt(int $int_to_sanitise): int
+    {
+        $validated_int = false;
+
+        if (!empty($int_to_sanitise))
+        {
+            $sanitised_string = filter_var($int_to_sanitise, FILTER_SANITIZE_STRING);
+            $validated_int = filter_var($sanitised_string, FILTER_VALIDATE_INT);
+        }
+        return $validated_int;
+    }
+
+    public function validateBool(bool $bool_to_validate): bool
+    {
+        $validated_bool = false;
+
+        if (!empty($bool_to_validate))
+        {
+            $sanitised_string = filter_var($bool_to_validate, FILTER_VALIDATE_BOOLEAN);
+            $validated_bool = filter_var($sanitised_string, FILTER_VALIDATE_BOOLEAN);
+        }
+        return $validated_bool;
+    }
 
 }
