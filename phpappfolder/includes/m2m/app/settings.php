@@ -27,11 +27,11 @@ $settings = [
     ],
     'doctrine_settings' => [
         'driver' => 'pdo_mysql',
-        'host' => 'localhost',
-        'dbname' => 'registered_users_db',
+        'host' => '127.0.0.1',
+        'dbname' => 'm2m',
         'port' => '3306',
-        'user' => 'root',
-        'password' => '',
+        'user' => 'm2m',
+        'password' => 'm2m',
         'charset' => 'utf8mb4'
     ],
 ];

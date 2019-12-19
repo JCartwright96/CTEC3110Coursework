@@ -6,14 +6,14 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 -- Remove existing database, if any, and then create an empty database
 --
 
-DROP DATABASE IF EXISTS `registered_users_db`;
+DROP DATABASE IF EXISTS `m2m`;
 
-CREATE DATABASE IF NOT EXISTS registered_users_db COLLATE utf8_unicode_ci;
+CREATE DATABASE IF NOT EXISTS m2m COLLATE utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `user_data`;
 DROP TABLE IF EXISTS `message_data`;
 
-USE registered_users_db;
+USE m2m;
 
 --
 -- Table structure for table `user_data`
@@ -32,7 +32,7 @@ CREATE TABLE `user_data` (
 --
 CREATE TABLE `message_data` (
   `message_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `phone_number` int(15) NOT NULL,
+  `phone_number` bigint(15) NOT NULL,
   `switch_01` BOOLEAN NOT NULL,
   `switch_02` BOOLEAN NOT NULL,
   `switch_03` BOOLEAN NOT NULL,
@@ -47,8 +47,8 @@ CREATE TABLE `message_data` (
 --
 -- Create the user account
 --
-GRANT SELECT, INSERT ON registered_users_db.user_data TO 'registered_user'@localhost IDENTIFIED BY 'registered_user_pass';
-GRANT SELECT ON registered_users_db.message_data TO 'registered_user'@localhost IDENTIFIED BY 'registered_user_pass';
+GRANT SELECT, INSERT ON m2m.user_data TO 'm2m'@localhost IDENTIFIED BY 'm2m';
+GRANT SELECT, INSERT ON m2m.message_data TO 'm2m'@localhost IDENTIFIED BY 'm2m';
 
 
 

@@ -1,4 +1,6 @@
 <?php
+
+
 $container['view'] = function ($container) {
     $view = new \Slim\Views\Twig(
         $container['settings']['view']['template_path'],
@@ -16,7 +18,6 @@ $container['view'] = function ($container) {
     return $view;
 };
 
-
 $container['soapWrapper'] = function ($container) {
     $retrieve_message_data_model = new \M2m\SoapWrapper();
     return $retrieve_message_data_model;
@@ -31,3 +32,5 @@ $container['xmlParser'] = function ($container) {
     $model = new \M2m\XmlParser();
     return $model;
 };
+
+

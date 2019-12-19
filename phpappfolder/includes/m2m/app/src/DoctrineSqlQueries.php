@@ -19,26 +19,42 @@ class DoctrineSqlQueries
 
     public function __destruct(){}
 
-    public static function queryStoreMessageData($queryBuilder, array $cleaned_parameters, string $hashed_password)
+    public static function queryStoreMessageData($queryBuilder, array $cleaned_parameters)
     {
-        $store_result = [];
-        $username = $cleaned_parameters['sanitised_username'];
-        $email = $cleaned_parameters['sanitised_email'];
-        $dietary_requirements = $cleaned_parameters['sanitised_requirements'];
 
-        $queryBuilder = $queryBuilder->insert('user_data')
+        $store_result = [];
+
+        $phone = $cleaned_parameters['phone'];
+        //$time = $cleaned_parameters['time'];
+        $switch_1 = $cleaned_parameters['switch_1'];
+        $switch_2 = $cleaned_parameters['switch_2'];
+        $switch_3 = $cleaned_parameters['switch_3'];
+        $switch_4 = $cleaned_parameters['switch_4'];
+        $fan = $cleaned_parameters['fan'];
+        $heater = $cleaned_parameters['heater'];
+        $keypad = $cleaned_parameters['keypad'];
+        
+        $queryBuilder = $queryBuilder->insert('message_data')
             ->values([
-                'user_name' => ':name',
-                'email' => ':email',
-                'dietary' => ':diet',
-                'password' => ':password',
-            ])
-            ->setParameters([
-                ':name' => $username,
-                ':email' => $email,
-                ':diet' => $dietary_requirements,
-                ':password' => $hashed_password
+                'phone_number' => ':phone',
+                'switch_01' => ':switch_01',
+                'switch_02' => ':switch_02',
+                'switch_03' => ':switch_03',
+                'switch_04' => ':switch_04',
+                'fan' => ':fan',
+                'heater' => ':heater',
+                'keypad' => ':keypad'
+            ])->setParameters([
+                ':phone' => $phone,
+                ':switch_01' => $switch_1,
+                ':switch_02' => $switch_2,
+                ':switch_03' => $switch_3,
+                ':switch_04' => $switch_4,
+                ':fan' => $fan,
+                ':heater' => $heater,
+                ':keypad' => $keypad
             ]);
+
 
         $store_result['outcome'] = $queryBuilder->execute();
         $store_result['sql_query'] = $queryBuilder->getSQL();

@@ -1,5 +1,12 @@
 <?php
 
+
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\Tools\Setup;
+
 require 'vendor/autoload.php';
 
 $settings = require __DIR__ . '/app/settings.php';

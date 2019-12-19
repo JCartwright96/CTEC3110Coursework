@@ -1,7 +1,8 @@
 <?php
 
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
+
+use Slim\Http\Request;
+use Slim\Http\Response;
 use Doctrine\DBAL\DriverManager;
 
 $app->get('/messages', function(Request $request, Response $response) use ($app)
@@ -12,8 +13,6 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
 
     foreach ($messages as $message) {
         libxml_use_internal_errors(true);
-
-
             $message = simplexml_load_string($message);
             if (isset($message->message)) {
                 if (isJson($message->message)) {
@@ -21,13 +20,10 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
                     $message_array = json_decode($message_array, true);
                     if( isset( $message_array['18-3110-AF'] ) ){
                         //THIS IS OUR MESSAGE
-                        $message_array['18-3110-AF']['source'] = (string)$message->sourcemsisdn;
+                        $message_array['18-3110-AF']['phone'] = (string)$message->sourcemsisdn;
                         $message_array['18-3110-AF']['time'] = (string)$message->receivedtime;
 
-                        var_dump($message_array);
-
-
-                        //storeMessageDetails($app, $cleaned_parameters);
+                        echo (storeMessageDetails($app, $message_array['18-3110-AF']));
                     }
                 }
             }
@@ -99,19 +95,16 @@ function storeMessageDetails($app, array $cleaned_parameters): string
     $storage_result = [];
     $store_result = '';
 
-    //var_dump('asd');
-    //die();
-
     $database_connection_settings = $app->getContainer()->get('doctrine_settings');
-    //var_dump($database_connection_settings);
-    //die();
     $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
     $database_connection = DriverManager::getConnection($database_connection_settings);
 
-    //$queryBuilder = $database_connection->createQueryBuilder();
+    $queryBuilder = $database_connection->createQueryBuilder();
 
-    //$storage_result = $doctrine_queries::queryStoreMessageData($queryBuilder, $cleaned_parameters);
-    $storage_result = 1;
+
+    $storage_result = $doctrine_queries::queryStoreMessageData($queryBuilder, $cleaned_parameters);
+
+
     if ($storage_result['outcome'] == 1)
     {
         $store_result = 'User data was successfully stored using the SQL query: ' . $storage_result['sql_query'];
