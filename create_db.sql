@@ -10,10 +10,11 @@ DROP DATABASE IF EXISTS `m2m`;
 
 CREATE DATABASE IF NOT EXISTS m2m COLLATE utf8_unicode_ci;
 
+USE m2m;
+
 DROP TABLE IF EXISTS `user_data`;
 DROP TABLE IF EXISTS `message_data`;
 
-USE m2m;
 
 --
 -- Table structure for table `user_data`

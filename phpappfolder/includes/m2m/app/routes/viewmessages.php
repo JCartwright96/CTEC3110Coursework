@@ -22,8 +22,10 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
                         //THIS IS OUR MESSAGE
                         $message_array['18-3110-AF']['phone'] = (string)$message->sourcemsisdn;
                         $message_array['18-3110-AF']['time'] = (string)$message->receivedtime;
-                        
-                        echo (storeMessageDetails($app, $message_array['18-3110-AF']));
+
+                        $cleaned_parameters = cleanupMessageData($app, $message_array['18-3110-AF']);
+
+                        echo (storeMessageDetails($app, $cleaned_parameters));
                         
 //                      $cleaned_parameters = cleanupMessageData($app, $message_array['18-3110-AF']);
 //                      echo storeMessageDetails($app, $cleaned_parameters);
@@ -145,10 +147,10 @@ function cleanupMessageData($app, $tainted_parameters)
 
     // Cleaning each of the tainted parameters, and adding them to the cleaned array
     $cleaned_parameters['phone'] = $validator->validateInt($tainted_phone_number);
-    $cleaned_parameters['switch_1'] = $validator->validateBool($tainted_s1);
-    $cleaned_parameters['switch_2'] = $validator->validateBool($tainted_s2);
-    $cleaned_parameters['switch_3'] = $validator->validateBool($tainted_s3);
-    $cleaned_parameters['switch_4'] = $validator->validateBool($tainted_s4);
+    $cleaned_parameters['switch_1'] = (int)$validator->validateBool($tainted_s1);
+    $cleaned_parameters['switch_2'] = (int)$validator->validateBool($tainted_s2);
+    $cleaned_parameters['switch_3'] = (int)$validator->validateBool($tainted_s3);
+    $cleaned_parameters['switch_4'] = (int)$validator->validateBool($tainted_s4);
     $cleaned_parameters['fan'] = $validator->sanitiseString($tainted_fan);
     $cleaned_parameters['heater'] = $validator->validateInt($tainted_heater);
     $cleaned_parameters['keypad'] = $validator->validateInt($tainted_keypad);
