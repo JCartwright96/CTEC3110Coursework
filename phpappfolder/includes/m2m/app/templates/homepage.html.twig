@@ -3,50 +3,59 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h1>M2M Connect Home</h1>
-                <a href="{{ messages_link }}">Download Messages</a>
+                <h1 style="padding-bottom: 20px;">M2M Connect</h1>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-9">
                 {% if messages %}
-                    <h4>Messages</h4>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Phone</th>
-                            <th>Switch 1</th>
-                            <th>Switch 2</th>
-                            <th>Switch 3</th>
-                            <th>Switch 4</th>
-                            <th>Fan</th>
-                            <th>Heater</th>
-                            <th>Keypad</th>
-                            <th>Received Time</th>
-                            <th>Time Stamp</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h4>Messages</h4></div>
+                        <div class="panel-body">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Phone</th>
+                                    <th>Switch 1</th>
+                                    <th>Switch 2</th>
+                                    <th>Switch 3</th>
+                                    <th>Switch 4</th>
+                                    <th>Fan</th>
+                                    <th>Heater</th>
+                                    <th>Keypad</th>
+                                    <th>Received Time</th>
+                                    <th>Time Stamp</th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-                    {% for message in messages %}
-                        <tr>
-                            <th scope="row">{{ message.message_id }}</th>
-                            <td>{{ message.phone_number }}</td>
-                            <td>{{ message.switch_01 }}</td>
-                            <td>{{ message.switch_02 }}</td>
-                            <td>{{ message.switch_03 }}</td>
-                            <td>{{ message.switch_04 }}</td>
-                            <td>{{ message.fan }}</td>
-                            <td>{{ message.heater }}</td>
-                            <td>{{ message.keypad }}</td>
-                            <td>{{ message.receivedtime }}</td>
-                            <td>{{ message.timestamp }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                                {% for message in messages %}
+                                    <tr>
+                                        <th scope="row">{{ message.message_id }}</th>
+                                        <td>{{ message.phone_number }}</td>
+                                        <td>{{ message.switch_01 }}</td>
+                                        <td>{{ message.switch_02 }}</td>
+                                        <td>{{ message.switch_03 }}</td>
+                                        <td>{{ message.switch_04 }}</td>
+                                        <td>{{ message.fan }}</td>
+                                        <td>{{ message.heater }}</td>
+                                        <td>{{ message.keypad }}</td>
+                                        <td>{{ message.receivedtime }}</td>
+                                        <td>{{ message.timestamp }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 {% endif%}
+            </div>
+            <div class="col-sm-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Current Settings</div>
+                    <div class="panel-body">Panel Content</div>
+                </div>
             </div>
         </div>
     </div>

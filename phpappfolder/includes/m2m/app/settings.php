@@ -1,6 +1,6 @@
 <?php
 $app_url = dirname($_SERVER['SERVER_NAME']);
-$css_path = $app_url . '/css/m2m.css';
+$css_path = $app_url . '/css/main.css';
 define('CSS_PATH', $css_path);
 define('APP_URL', $app_url);
 

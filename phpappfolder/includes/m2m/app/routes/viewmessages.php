@@ -38,12 +38,13 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
 
     //$storage_result = storeMessageDetails($app, $cleaned_parameters, $hashed_password);
 
-
+    $messages_link = $this->router->pathFor('messages');
     return $this->view->render($response,
         'homepage.html.twig',
         [
             'css_path' => CSS_PATH,
             'app_url' => APP_URL,
+            'messages_link' => $messages_link,
             'landing_page' => $_SERVER["SCRIPT_NAME"],
             'action' => 'storesessiondetails',
             'initial_input_box_value' => null,

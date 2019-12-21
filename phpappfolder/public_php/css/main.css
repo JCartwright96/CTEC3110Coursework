@@ -1,0 +1,19 @@
+.navbar {
+    background-color: #222;
+    border-radius: 0px!important;
+}
+
+.navbar ul {
+    display: inline-flex;
+    list-style: none;
+    margin-bottom: 0px;
+    line-height: 50px;
+}
+
+.navbar ul li {
+    padding: 0 10px;
+}
+
+.navbar ul li a {
+    color: white;
+}
