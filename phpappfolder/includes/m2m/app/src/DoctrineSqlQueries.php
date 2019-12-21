@@ -100,7 +100,7 @@ class DoctrineSqlQueries
             ->andWhere('switch_01 = \'' . $switch_1. '\'')
             ->andWhere('switch_02 = \'' . $switch_2. '\'')
             ->andWhere('switch_03 = \'' . $switch_3. '\'')
-            ->andWhere('switch_04 = \'' . $switch_4. '1\'')
+            ->andWhere('switch_04 = \'' . $switch_4. '\'')
             ->andWhere('heater = \'' . $heater. '\'')
             ->andWhere('fan = \'' . $fan. '\'')
             ->andWhere('keypad = \'' . $keypad. '\'')
@@ -109,7 +109,6 @@ class DoctrineSqlQueries
         $stmt = $conn->query($queryBuilder->getSQL()); // Simple, but has several drawbacks
 
         return $stmt->fetch();
-
     }
 
     public static function queryGetMessageData($conn) {
@@ -117,7 +116,7 @@ class DoctrineSqlQueries
         $stmt = $conn->query($sql); // Simple, but has several drawbacks
         $messages = [];
 
-        
+
         while ($row = $stmt->fetch()) {
             $messages[] = $row;
         }

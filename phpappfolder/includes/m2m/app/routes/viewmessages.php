@@ -114,9 +114,8 @@ function storeMessageDetails($app, array $cleaned_parameters): string
     $queryBuilder = $database_connection->createQueryBuilder();
     $select_result = $doctrine_queries::queryCheckMessageData($database_connection, $queryBuilder, $cleaned_parameters);
 
-    if ($select_result == true) {
+    if ($select_result == false) {
         $storage_result = $doctrine_queries::queryStoreMessageData($queryBuilder, $cleaned_parameters);
-
 
         if ($storage_result['outcome'] == 1)
         {
