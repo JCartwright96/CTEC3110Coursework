@@ -113,10 +113,11 @@ class DoctrineSqlQueries
     }
 
     public static function queryGetMessageData($conn) {
-        $sql = "SELECT * FROM message_data";
+        $sql = "SELECT * FROM message_data ORDER BY `message_id` DESC";
         $stmt = $conn->query($sql); // Simple, but has several drawbacks
         $messages = [];
 
+        
         while ($row = $stmt->fetch()) {
             $messages[] = $row;
         }
