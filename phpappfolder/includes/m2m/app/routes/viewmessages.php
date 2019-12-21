@@ -25,10 +25,8 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
 
                         $cleaned_parameters = cleanupMessageData($app, $message_array['18-3110-AF']);
 
-                        echo (storeMessageDetails($app, $cleaned_parameters));
-                        
-//                      $cleaned_parameters = cleanupMessageData($app, $message_array['18-3110-AF']);
-//                      echo storeMessageDetails($app, $cleaned_parameters);
+                        storeMessageDetails($app, $cleaned_parameters);
+
                     }
                 }
             }
@@ -106,19 +104,23 @@ function storeMessageDetails($app, array $cleaned_parameters): string
 
     $queryBuilder = $database_connection->createQueryBuilder();
 
+    $select_result = $doctrine_queries::queryCheckMessageData($database_connection, $queryBuilder, $cleaned_parameters);
 
-    $storage_result = $doctrine_queries::queryStoreMessageData($queryBuilder, $cleaned_parameters);
+    if ($select_result == true) {
+        $storage_result = $doctrine_queries::queryStoreMessageData($queryBuilder, $cleaned_parameters);
 
 
-    if ($storage_result['outcome'] == 1)
-    {
-        $store_result = 'User data was successfully stored using the SQL query: ' . $storage_result['sql_query'];
+        if ($storage_result['outcome'] == 1)
+        {
+            $store_result = 'User data was successfully stored using the SQL query: ' . $storage_result['sql_query'];
+        }
+        else
+        {
+            $store_result = 'There appears to have been a problem when saving your details.  Please try again later.';
+
+        }
     }
-    else
-    {
-        $store_result = 'There appears to have been a problem when saving your details.  Please try again later.';
 
-    }
     return $store_result;
 }
 
@@ -154,9 +156,7 @@ function cleanupMessageData($app, $tainted_parameters)
     $cleaned_parameters['fan'] = $validator->sanitiseString($tainted_fan);
     $cleaned_parameters['heater'] = $validator->validateInt($tainted_heater);
     $cleaned_parameters['keypad'] = $validator->validateInt($tainted_keypad);
-
-    // Received time is returned in the clean parameters but not yet used/stored
-    $cleaned_parameters['received_time'] = $tainted_parameters['time'];
+    $cleaned_parameters['received_time'] = $validator->validateDateTime($tainted_parameters['time']);
 
     return $cleaned_parameters;
 }

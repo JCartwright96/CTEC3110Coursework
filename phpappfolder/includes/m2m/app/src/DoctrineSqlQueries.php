@@ -13,6 +13,8 @@
 
 namespace M2m;
 
+use Doctrine\DBAL\DriverManager;
+
 class DoctrineSqlQueries
 {
     public function __construct(){}
@@ -33,6 +35,8 @@ class DoctrineSqlQueries
         $fan = $cleaned_parameters['fan'];
         $heater = $cleaned_parameters['heater'];
         $keypad = $cleaned_parameters['keypad'];
+        $receivedtime = $cleaned_parameters['received_time'];
+
         
         $queryBuilder = $queryBuilder->insert('message_data')
             ->values([
@@ -43,7 +47,8 @@ class DoctrineSqlQueries
                 'switch_04' => ':switch_04',
                 'fan' => ':fan',
                 'heater' => ':heater',
-                'keypad' => ':keypad'
+                'keypad' => ':keypad',
+                'receivedtime' => ':receivedtime'
             ])->setParameters([
                 ':phone' => $phone,
                 ':switch_01' => $switch_1,
@@ -52,7 +57,8 @@ class DoctrineSqlQueries
                 ':switch_04' => $switch_4,
                 ':fan' => $fan,
                 ':heater' => $heater,
-                ':keypad' => $keypad
+                ':keypad' => $keypad,
+                ':receivedtime' => $receivedtime
             ]);
 
 
@@ -60,6 +66,50 @@ class DoctrineSqlQueries
         $store_result['sql_query'] = $queryBuilder->getSQL();
 
         return $store_result;
+    }
+
+    public static function querySelectMessageData($conn)
+    {
+        $sql = "SELECT * FROM message_data";
+        $stmt = $conn->query($sql); // Simple, but has several drawbacks
+        while ($row = $stmt->fetch()) {
+
+            var_dump($row);
+        }
+
+        $sql_query_string = '';
+        return $sql_query_string;
+    }
+
+    public static function queryCheckMessageData($conn, $queryBuilder, array $cleaned_parameters)
+    {
+        $phone = $cleaned_parameters['phone'];
+        //$time = $cleaned_parameters['time'];
+        $switch_1 = $cleaned_parameters['switch_1'];
+        $switch_2 = $cleaned_parameters['switch_2'];
+        $switch_3 = $cleaned_parameters['switch_3'];
+        $switch_4 = $cleaned_parameters['switch_4'];
+        $fan = $cleaned_parameters['fan'];
+        $heater = $cleaned_parameters['heater'];
+        $keypad = $cleaned_parameters['keypad'];
+        $receivedtime = $cleaned_parameters['received_time'];
+
+        $queryBuilder = $queryBuilder->select('*')
+            ->from('message_data')
+            ->where('phone_number = \'' . $phone . '\'')
+            ->andWhere('switch_01 = \'' . $switch_1. '\'')
+            ->andWhere('switch_02 = \'' . $switch_2. '\'')
+            ->andWhere('switch_03 = \'' . $switch_3. '\'')
+            ->andWhere('switch_04 = \'' . $switch_4. '1\'')
+            ->andWhere('heater = \'' . $heater. '\'')
+            ->andWhere('fan = \'' . $fan. '\'')
+            ->andWhere('keypad = \'' . $keypad. '\'')
+            ->andWhere('receivedtime = \'' . $receivedtime. '\'');
+
+        $stmt = $conn->query($queryBuilder->getSQL()); // Simple, but has several drawbacks
+
+        return $stmt->fetch();
+
     }
 
     public static function queryRetrieveUserData()

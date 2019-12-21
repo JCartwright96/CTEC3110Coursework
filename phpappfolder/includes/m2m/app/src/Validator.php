@@ -43,4 +43,21 @@ class Validator
         return $validated_bool;
     }
 
+    public function validateDateTime(string $date_time_to_sanitise): string
+    {
+        $validated_dt = false;
+
+
+        if (!empty($date_time_to_sanitise))
+        {
+            $sanitised_string = filter_var($date_time_to_sanitise, FILTER_SANITIZE_STRING);
+
+            $date = str_replace('/', '-', $sanitised_string);
+
+            $validated_dt = date('Y-m-d H:i:s', strtotime($date));
+
+        }
+        return $validated_dt;
+    }
+
 }
