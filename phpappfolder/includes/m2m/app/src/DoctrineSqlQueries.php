@@ -112,6 +112,18 @@ class DoctrineSqlQueries
 
     }
 
+    public static function queryGetMessageData($conn) {
+        $sql = "SELECT * FROM message_data";
+        $stmt = $conn->query($sql); // Simple, but has several drawbacks
+        $messages = [];
+
+        while ($row = $stmt->fetch()) {
+            $messages[] = $row;
+        }
+
+        return $messages;
+
+    }
     public static function queryRetrieveUserData()
     {
         $sql_query_string = '';

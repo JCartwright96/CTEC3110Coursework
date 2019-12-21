@@ -1,9 +1,54 @@
 {% extends 'layout.html.twig' %}
 {% block content %}
     <div class="container">
-        <div class="col-sm-12">
-            <h1>M2M Connect Home</h1>
-            <a href="{{ messages_link }}">Download Messages</a>
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>M2M Connect Home</h1>
+                <a href="{{ messages_link }}">Download Messages</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-9">
+                {% if messages %}
+                    <h4>Messages</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Phone</th>
+                            <th>Switch 1</th>
+                            <th>Switch 2</th>
+                            <th>Switch 3</th>
+                            <th>Switch 4</th>
+                            <th>Fan</th>
+                            <th>Heater</th>
+                            <th>Keypad</th>
+                            <th>Received Time</th>
+                            <th>Time Stamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for message in messages %}
+                        <tr>
+                            <th scope="row">{{ message.message_id }}</th>
+                            <td>{{ message.phone_number }}</td>
+                            <td>{{ message.switch_01 }}</td>
+                            <td>{{ message.switch_02 }}</td>
+                            <td>{{ message.switch_03 }}</td>
+                            <td>{{ message.switch_04 }}</td>
+                            <td>{{ message.fan }}</td>
+                            <td>{{ message.heater }}</td>
+                            <td>{{ message.keypad }}</td>
+                            <td>{{ message.receivedtime }}</td>
+                            <td>{{ message.timestamp }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% endif%}
+            </div>
         </div>
     </div>
+
 {% endblock %}

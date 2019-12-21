@@ -33,6 +33,8 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
 
     }
 
+    //After any new messages have been stored, get messages from the db.
+    $messages = getMessageDetails($app);
 
     //$storage_result = storeMessageDetails($app, $cleaned_parameters, $hashed_password);
 
@@ -52,10 +54,17 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
             'info_text' => 'Your information will be stored in either a session file or in a database',
             'sid_text' => 'Your super secret session SID is ',
             'sid' => $sid,
+            'messages' => $messages
         ]);
 })->setName('messages');
 
 
+/**
+ * @param $app
+ * @return array
+ *
+ * This is a function to view all the messages on the m2m server through an SOAP call. Messages will not be deleted from the server.
+ */
 function peekMessages($app)
 {
     $message_data = [];
@@ -95,7 +104,6 @@ function peekMessages($app)
  */
 function storeMessageDetails($app, array $cleaned_parameters): string
 {
-    $storage_result = [];
     $store_result = '';
 
     $database_connection_settings = $app->getContainer()->get('doctrine_settings');
@@ -103,7 +111,6 @@ function storeMessageDetails($app, array $cleaned_parameters): string
     $database_connection = DriverManager::getConnection($database_connection_settings);
 
     $queryBuilder = $database_connection->createQueryBuilder();
-
     $select_result = $doctrine_queries::queryCheckMessageData($database_connection, $queryBuilder, $cleaned_parameters);
 
     if ($select_result == true) {
@@ -122,6 +129,18 @@ function storeMessageDetails($app, array $cleaned_parameters): string
     }
 
     return $store_result;
+}
+
+function getMessageDetails($app) {
+    $messages = [];
+
+    $database_connection_settings = $app->getContainer()->get('doctrine_settings');
+    $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
+    $database_connection = DriverManager::getConnection($database_connection_settings);
+
+    $messages = $doctrine_queries::queryGetMessageData($database_connection);
+
+    return $messages;
 }
 
 /**
