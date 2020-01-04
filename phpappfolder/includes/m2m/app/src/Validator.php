@@ -60,4 +60,16 @@ class Validator
         return $validated_dt;
     }
 
+
+    public function sanitiseEmail(string $email_to_sanitise): string
+    {
+        $cleaned_string = false;
+
+        if (!empty($email_to_sanitise))
+        {
+            $sanitised_email = filter_var($email_to_sanitise, FILTER_SANITIZE_EMAIL);
+            $cleaned_string = filter_var($sanitised_email, FILTER_VALIDATE_EMAIL);
+        }
+        return $cleaned_string;
+    }
 }
