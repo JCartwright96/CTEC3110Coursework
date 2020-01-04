@@ -7,6 +7,8 @@ define('APP_URL', $app_url);
 $wsdl = 'https://m2mconnect.ee.co.uk/orange-soap/services/MessageServiceByCountry?wsdl';
 define('WSDL', $wsdl);
 ini_set("xdebug.overload_var_dump", "off");
+define ('BCRYPT_ALGO', PASSWORD_DEFAULT);
+define ('BCRYPT_COST', 12);
 
 
 $settings = [
