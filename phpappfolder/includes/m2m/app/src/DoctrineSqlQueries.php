@@ -156,4 +156,18 @@ class DoctrineSqlQueries
 
         return $store_result;
     }
+    
+       public static function queryGetLatestMessageData($conn) {
+        $sql = "SELECT * FROM message_data WHERE timestamp = (SELECT MAX(timestamp) FROM message_data) ";
+        $stmt = $conn->query($sql); // Simple, but has several drawbacks
+        $messages = [];
+
+
+        while ($row = $stmt->fetch()) {
+            $messages[] = $row;
+        }
+
+        return $messages;
+
+    }
 }
