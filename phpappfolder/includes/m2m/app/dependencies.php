@@ -41,6 +41,7 @@ $container['validator'] = function ($container) {
     return $validator;
 };
 
-
-
-
+$container['bcryptWrapper'] = function ($container) {
+    $wrapper = new \M2m\BcryptWrapper();
+    return $wrapper;
+};
