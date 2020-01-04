@@ -39,12 +39,17 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
     //$storage_result = storeMessageDetails($app, $cleaned_parameters, $hashed_password);
 
     $messages_link = $this->router->pathFor('messages');
+    $login_link = $this->router->pathFor('login');
+    $register_link = $this->router->pathFor('registeruserform');
+
     return $this->view->render($response,
         'homepage.html.twig',
         [
             'css_path' => CSS_PATH,
             'app_url' => APP_URL,
             'messages_link' => $messages_link,
+            'login_link' => $login_link,
+            'register_link' => $register_link,
             'landing_page' => $_SERVER["SCRIPT_NAME"],
             'action' => 'storesessiondetails',
             'initial_input_box_value' => null,
