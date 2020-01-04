@@ -129,4 +129,31 @@ class DoctrineSqlQueries
         $sql_query_string = '';
         return $sql_query_string;
     }
+
+    public static function queryStoreUserData($queryBuilder, array $cleaned_parameters, string $hashed_password)
+    {
+
+        $store_result = [];
+
+        $username = $cleaned_parameters['sanitised_username'];
+        $emailAddress = $cleaned_parameters['sanitised_email'];
+
+
+        $queryBuilder = $queryBuilder->insert('user_data')
+            ->values([
+                'user_name' => ':username',
+                'password' => ':password',
+                'email' => ':email',
+            ])->setParameters([
+                ':username' => $username,
+                ':password' => $hashed_password,
+                ':email' => $emailAddress,
+            ]);
+
+
+        $store_result['outcome'] = $queryBuilder->execute();
+        $store_result['sql_query'] = $queryBuilder->getSQL();
+
+        return $store_result;
+    }
 }
