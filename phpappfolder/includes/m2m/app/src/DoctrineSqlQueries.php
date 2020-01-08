@@ -157,7 +157,7 @@ class DoctrineSqlQueries
         return $store_result;
     }
     
-       public static function queryGetLatestMessageData($conn) {
+    public static function queryGetLatestMessageData($conn) {
         $sql = "SELECT * FROM message_data WHERE timestamp = (SELECT MAX(timestamp) FROM message_data) ";
         $stmt = $conn->query($sql); // Simple, but has several drawbacks
         $messages = [];
@@ -169,5 +169,23 @@ class DoctrineSqlQueries
 
         return $messages;
 
+    }
+    
+    /**
+     * Checks if a specific user exists in the database
+     * @param $conn
+     * @param $cleaned_parameters
+     * @return mixed
+     */
+    function queryCheckUserExists($conn, $cleaned_parameters) {
+        $username = $cleaned_parameters['sanitised_username'];
+
+        $sql ='SELECT * FROM user_data WHERE user_name=:username';
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':username', $username);
+        $stmt->execute(); // Simple, but has several drawbacks
+        $user = $stmt->fetch();
+
+        return $user;
     }
 }
