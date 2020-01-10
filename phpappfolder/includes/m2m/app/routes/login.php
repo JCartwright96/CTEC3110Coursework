@@ -9,7 +9,6 @@ $app->post(
     function(Request $request, Response $response) use ($app)
     {
         $tainted_parameters = $request->getParsedBody();
-
         $cleaned_parameters = cleanupLoginParameters($app, $tainted_parameters);
 
         $validated_login = validateLogin($app, $cleaned_parameters);
@@ -18,9 +17,21 @@ $app->post(
         $home_link = $this->router->pathFor("homepage");
         $messages_link = $this->router->pathFor('messages');
         $login_link = $this->router->pathFor('login');
+        $logout_link = $this->router->pathFor('logout');
         $sid = session_id();
 
         if($validated_login) {
+            $session = new \RKA\Session();
+            $session->set('logged', true);
+            $session->set('auto_id', $validated_login['auto_id']);
+            $session->set('user_name', $validated_login['user_name']);
+
+            $session_data = [
+                'logged' => $session->get('logged'),
+                'auto_id' => $session->get('logged'),
+                'user_name' => $session->get('user_name')
+            ];
+
             $html_output = $this->view->render($response,
                 'homepage.html.twig',
                 [
@@ -31,6 +42,8 @@ $app->post(
                     'login_link' => $login_link,
                     'register_link' => $register_link,
                     'landing_page' => $_SERVER["SCRIPT_NAME"],
+                    'session_data' => $session_data,
+                    'logout_link' => $logout_link,
                 ]);
         }
 
@@ -43,6 +56,7 @@ $app->post(
                     'home_link' => $home_link,
                     'messages_link' => $messages_link,
                     'login_link' => $login_link,
+                    'logout_link' => $logout_link,
                     'register_link' => $register_link,
                     'landing_page' => $_SERVER["SCRIPT_NAME"],
                     'page_title' => 'Homepage',
@@ -62,14 +76,14 @@ function cleanupLoginParameters($app, $tainted_parameters)
     $cleaned_parameters = [];
     $validator = $app->getContainer()->get('validator');
 
-    $tainted_username = $tainted_parameters['username'];
+    $tainted_email = $tainted_parameters['email'];
     $tainted_password = $tainted_parameters['password'];
 
     if (isset ($tainted_password)) {
-        $cleaned_parameters['password'] = $tainted_parameters['password'];
+        $cleaned_parameters['password'] = $tainted_password;
     }
-    if (isset($tainted_username)) {
-        $cleaned_parameters['sanitised_username'] = $validator->sanitiseString($tainted_username);
+    if (isset($tainted_email)) {
+        $cleaned_parameters['sanitised_email'] = $validator->sanitiseString($tainted_email);
     }
     return $cleaned_parameters;
 }
@@ -86,14 +100,13 @@ function validateLogin($app, $cleaned_parameters) {
     $database_connection_settings = $app->getContainer()->get('doctrine_settings');
     $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
     $database_connection = DriverManager::getConnection($database_connection_settings);
-
     $result = $doctrine_queries::queryCheckUserExists($database_connection, $cleaned_parameters);
 
     $input_password = $cleaned_parameters['password'];
     $verify_password = $result['password'];
 
     if(password_verify($input_password, $verify_password)) {
-        return true;
+        return $result;
     }
     else return false;
 }

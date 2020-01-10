@@ -177,14 +177,17 @@ class DoctrineSqlQueries
      * @param $cleaned_parameters
      * @return mixed
      */
-    function queryCheckUserExists($conn, $cleaned_parameters) {
-        $username = $cleaned_parameters['sanitised_username'];
+    public static function queryCheckUserExists($conn, $cleaned_parameters) {
 
-        $sql ='SELECT * FROM user_data WHERE user_name=:username';
+
+        $email = $cleaned_parameters['sanitised_email'];
+
+        $sql ='SELECT * FROM user_data WHERE email=:email';
         $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':username', $username);
-        $stmt->execute(); // Simple, but has several drawbacks
+        $stmt->bindValue(':email', $email);
+        $stmt->execute();
         $user = $stmt->fetch();
+
 
         return $user;
     }

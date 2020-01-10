@@ -11,6 +11,13 @@ $app->get('/', function(Request $request, Response $response) use ($app)
     $current_settings = $current_settings[0];
 
 
+    $session = new \RKA\Session();
+    $session_data = [
+        'logged' => $session->get('logged'),
+        'auto_id' => $session->get('logged'),
+        'user_name' => $session->get('user_name')
+    ];
+
     $message_id = $current_settings['message_id'];
     $phone_number = $current_settings['phone_number'];
     $switch_01 = $current_settings['switch_01'];
@@ -24,7 +31,10 @@ $app->get('/', function(Request $request, Response $response) use ($app)
     $timestamp = $current_settings['timestamp'];
     $messages_link = $this->router->pathFor('messages');
     $login_link = $this->router->pathFor('login');
+    $logout_link = $this->router->pathFor('logout');
     $register_link = $this->router->pathFor('registeruserform');
+
+
     return $this->view->render($response,
         'homepage.html.twig',
         [
@@ -33,6 +43,7 @@ $app->get('/', function(Request $request, Response $response) use ($app)
             'messages_link' => $messages_link,
             'login_link' => $login_link,
             'register_link' => $register_link,
+            'logout_link' => $logout_link,
             'currentsettings' => $current_settings,
             'message.message_id' => $message_id,
             'message.phone_number' => $phone_number,
@@ -55,6 +66,7 @@ $app->get('/', function(Request $request, Response $response) use ($app)
             'info_text' => 'Your information will be stored in either a session file or in a database',
             'sid_text' => 'Your super secret session SID is ',
             'sid' => $sid,
+            'session_data' => $session_data
         ]);
 })->setName('homepage');
 

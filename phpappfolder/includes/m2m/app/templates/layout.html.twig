@@ -19,10 +19,16 @@
             </div>
             <div style="text-align: right;" class="col-sm-8">
                 <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="{{ messages_link }}">View</a></li>
-                    <li><a href="{{ login_link }}">Login</a></li>
-                    <li><a href="{{ register_link }}">Register</a></li>
+                    {% if session_data.logged %}
+                        <li><a href="/">Home</a></li>
+                        <li><a href="{{ messages_link }}">View</a></li>
+                        <li><a href="{{ logout_link }}">Logout</a></li>
+                    {% else %}
+                        <li><a href="/">Home</a></li>
+                        <li><a href="{{ login_link }}">Login</a></li>
+                        <li><a href="{{ register_link }}">Register</a></li>
+                    {% endif %}
+
                 </ul>
             </div>
         </div>

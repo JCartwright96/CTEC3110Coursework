@@ -6,13 +6,21 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app->get('/login', function(Request $request, Response $response)
 {
+
+    $session = new \RKA\Session();
+    $session_data = [
+        'logged' => $session->get('logged'),
+        'auto_id' => $session->get('logged'),
+        'user_name' => $session->get('user_name')
+    ];
+
     $sid = session_id();
 
     $home_link = $this->router->pathFor("homepage");
     $login_link = $this->router->pathFor('login');
     $messages_link = $this->router->pathFor('messages');
+    $logout_link = $this->router->pathFor('logout');
     $register_link = $this->router->pathFor('registeruserform');
-
 
     return $this->view->render($response,
         'login.html.twig',
@@ -22,6 +30,7 @@ $app->get('/login', function(Request $request, Response $response)
             'home_link' => $home_link,
             'messages_link' => $messages_link,
             'login_link' => $login_link,
+            'logout_link' => $logout_link,
             'register_link' => $register_link,
             'landing_page' => $_SERVER["SCRIPT_NAME"],
             'action' => 'loginvalidation',
@@ -30,5 +39,7 @@ $app->get('/login', function(Request $request, Response $response)
             'page_heading_1' => 'Login Form',
             'page_heading_2' => 'Complete the Login form below',
             'sid' => $sid,
+            'session_data' => $session_data
         ]);
+
 })->setName('login');

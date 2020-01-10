@@ -8,7 +8,12 @@ use Doctrine\DBAL\DriverManager;
 $app->get('/messages', function(Request $request, Response $response) use ($app)
 {
     $sid = session_id();
-
+    $session = new \RKA\Session();
+    $session_data = [
+        'logged' => $session->get('logged'),
+        'auto_id' => $session->get('logged'),
+        'user_name' => $session->get('user_name')
+    ];
     $messages = peekMessages($app);
 
     foreach ($messages as $message) {
@@ -41,7 +46,7 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
     $messages_link = $this->router->pathFor('messages');
     $login_link = $this->router->pathFor('login');
     $register_link = $this->router->pathFor('registeruserform');
-
+    $logout_link = $this->router->pathFor('logout');
     return $this->view->render($response,
         'homepage.html.twig',
         [
@@ -50,6 +55,7 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
             'messages_link' => $messages_link,
             'login_link' => $login_link,
             'register_link' => $register_link,
+            'logout_link' => $logout_link,
             'landing_page' => $_SERVER["SCRIPT_NAME"],
             'action' => 'storesessiondetails',
             'initial_input_box_value' => null,
@@ -60,7 +66,8 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
             'info_text' => 'Your information will be stored in either a session file or in a database',
             'sid_text' => 'Your super secret session SID is ',
             'sid' => $sid,
-            'messages' => $messages
+            'messages' => $messages,
+            'session_data' => $session_data
         ]);
 })->setName('messages');
 
