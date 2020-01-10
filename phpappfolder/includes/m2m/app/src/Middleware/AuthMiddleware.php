@@ -6,10 +6,8 @@ class AuthMiddleware extends Middleware
 {
     public function __invoke($request, $response, $next)
     {
-
-        
         if (!$this->container->auth->getStatus()) {
-            die('NOT TODAY!');
+            return $response->withRedirect($this->container->router->pathFor('login'));
         }
 
         $response = $next($request, $response);
