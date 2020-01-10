@@ -30,9 +30,9 @@ $app->post(
 
         $storage_result = storeUserDetails($app, $cleaned_parameters, $hashed_password);
 
-
         $messages_link = $this->router->pathFor('messages');
         $login_link = $this->router->pathFor('login');
+        $register_link = $this->router->pathFor('registeruserform');
         $sid = session_id();
 
         $html_output =  $this->view->render($response,
@@ -67,9 +67,11 @@ function cleanupParameters($app, $tainted_parameters)
 
     $tainted_username = $tainted_parameters['username'];
     $tainted_email = $tainted_parameters['email'];
+    $tainted_phone_number = $tainted_parameters['phone_number'];
 
     $cleaned_parameters['password'] = $tainted_parameters['password'];
     $cleaned_parameters['sanitised_username'] = $validator->sanitiseString($tainted_username);
+    $cleaned_parameters['sanitised_phone_number'] = $validator->sanitiseString($tainted_phone_number);
     $cleaned_parameters['sanitised_email'] = $validator->sanitiseEmail($tainted_email);
     return $cleaned_parameters;
 }

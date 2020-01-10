@@ -23,6 +23,7 @@ CREATE TABLE `user_data` (
   `auto_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_name` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone_number` varchar(15) COLLATE utf8mb4_unicode_ci,
   `password` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`auto_id`)

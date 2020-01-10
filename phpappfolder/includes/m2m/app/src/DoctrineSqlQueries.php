@@ -137,6 +137,7 @@ class DoctrineSqlQueries
 
         $username = $cleaned_parameters['sanitised_username'];
         $emailAddress = $cleaned_parameters['sanitised_email'];
+        $phone_number = $cleaned_parameters['sanitised_phone_number'];
 
 
         $queryBuilder = $queryBuilder->insert('user_data')
@@ -144,10 +145,12 @@ class DoctrineSqlQueries
                 'user_name' => ':username',
                 'password' => ':password',
                 'email' => ':email',
+                'phone_number' => ':phone_number'
             ])->setParameters([
                 ':username' => $username,
                 ':password' => $hashed_password,
                 ':email' => $emailAddress,
+                ':phone_number' => $phone_number
             ]);
 
 
