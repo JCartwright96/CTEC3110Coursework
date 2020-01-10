@@ -60,7 +60,7 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
             'info_text' => 'Your information will be stored in either a session file or in a database',
             'messages' => $messages
         ]);
-})->setName('messages');
+})->setName('messages')->add(new \M2m\Middleware\AuthMiddleware($container));
 
 
 /**
