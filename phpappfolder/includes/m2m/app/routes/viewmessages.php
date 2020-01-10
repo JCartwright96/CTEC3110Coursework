@@ -25,7 +25,6 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
                         $cleaned_parameters = cleanupMessageData($app, $message_array['18-3110-AF']);
 
                         storeMessageDetails($app, $cleaned_parameters);
-
                     }
                 }
             }
@@ -80,10 +79,10 @@ $app->get('/update-messages', function(Request $request, Response $response) use
                     $message_array['18-3110-AF']['phone'] = (string)$message->sourcemsisdn;
                     $message_array['18-3110-AF']['time'] = (string)$message->receivedtime;
 
+
                     $cleaned_parameters = cleanupMessageData($app, $message_array['18-3110-AF']);
 
                     storeMessageDetails($app, $cleaned_parameters);
-
                 }
             }
         }
@@ -142,13 +141,39 @@ function peekMessages($app)
             [
                 'username' => '19_17234645',
                 'password' => 'Password1234',
-                'count' => (int)100,
+                'count' => (int)9999,
                 'deviceMsisdn' => '',
                 'countryCode' => ''
             ];
         $webservice_value = '';
 
         $message_data = $soap_wrapper->getSoapData($soap_client, $soap_call_function, $soap_call_parameters, $webservice_value);
+    }
+
+    return $message_data;
+}
+
+function sendMessage($app, $data)
+{
+    $message_data = [];
+
+    $soap_wrapper = $app->getContainer()->get('soapWrapper');
+
+    $soap_client = $soap_wrapper->createSoapClient();
+
+    if (is_object($soap_client))
+    {
+        $soap_call_function = 'sendMessage';
+        $soap_call_parameters =
+            [
+                'username' => '19_17234645',
+                'password' => 'Password1234',
+                'deviceMsisdn' => '',
+                'countryCode' => ''
+            ];
+        $webservice_value = '';
+
+        $message_data = $soap_wrapper->getSoapData($soap_client, $soap_call_function, $soap_call_parameters, $webservice_value, $data);
     }
 
     return $message_data;
@@ -164,8 +189,9 @@ function peekMessages($app)
  * @return array
  * @throws \Doctrine\DBAL\DBALException
  */
-function storeMessageDetails($app, array $cleaned_parameters): string
+function storeMessageDetails($app, array $cleaned_parameters)
 {
+
     $store_result = '';
 
     $database_connection_settings = $app->getContainer()->get('doctrine_settings');
@@ -175,11 +201,21 @@ function storeMessageDetails($app, array $cleaned_parameters): string
     $queryBuilder = $database_connection->createQueryBuilder();
     $select_result = $doctrine_queries::queryCheckMessageData($database_connection, $queryBuilder, $cleaned_parameters);
 
+
     if ($select_result == false) {
         $storage_result = $doctrine_queries::queryStoreMessageData($queryBuilder, $cleaned_parameters);
 
         if ($storage_result['outcome'] == 1)
         {
+            //Send SMS recipt
+            $notify_message_data = [
+                'phone_number' => $cleaned_parameters['phone'],
+                'message'   => 'Your message has been received and downloaded onto the M2M web application.'
+            ];
+
+            sendMessage($app, $notify_message_data);
+
+
             $store_result = 'User data was successfully stored using the SQL query: ' . $storage_result['sql_query'];
         }
         else

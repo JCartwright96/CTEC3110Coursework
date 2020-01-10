@@ -106,7 +106,8 @@ class DoctrineSqlQueries
             ->andWhere('keypad = \'' . $keypad. '\'')
             ->andWhere('receivedtime = \'' . $receivedtime. '\'');
 
-        $stmt = $conn->query($queryBuilder->getSQL()); // Simple, but has several drawbacks
+
+        $stmt = $conn->query($queryBuilder->getSQL());
 
         return $stmt->fetch();
     }
