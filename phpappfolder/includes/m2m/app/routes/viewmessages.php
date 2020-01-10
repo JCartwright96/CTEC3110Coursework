@@ -63,6 +63,64 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
 })->setName('messages')->add(new \M2m\Middleware\AuthMiddleware($container));
 
 
+$app->get('/update-messages', function(Request $request, Response $response) use ($app)
+{
+
+    $messages = peekMessages($app);
+
+    foreach ($messages as $message) {
+        libxml_use_internal_errors(true);
+        $message = simplexml_load_string($message);
+        if (isset($message->message)) {
+            if (isJson($message->message)) {
+                $message_array = (string)$message->message;
+                $message_array = json_decode($message_array, true);
+                if( isset( $message_array['18-3110-AF'] ) ){
+                    //THIS IS OUR MESSAGE
+                    $message_array['18-3110-AF']['phone'] = (string)$message->sourcemsisdn;
+                    $message_array['18-3110-AF']['time'] = (string)$message->receivedtime;
+
+                    $cleaned_parameters = cleanupMessageData($app, $message_array['18-3110-AF']);
+
+                    storeMessageDetails($app, $cleaned_parameters);
+
+                }
+            }
+        }
+
+    }
+
+    //After any new messages have been stored, get messages from the db.
+    $messages = getMessageDetails($app);
+
+    //$storage_result = storeMessageDetails($app, $cleaned_parameters, $hashed_password);
+
+    $messages_link = $this->router->pathFor('messages');
+    $login_link = $this->router->pathFor('login');
+    $register_link = $this->router->pathFor('registeruserform');
+    $logout_link = $this->router->pathFor('logout');
+    return $this->view->render($response,
+        'update-messages.html.twig',
+        [
+            'css_path' => CSS_PATH,
+            'app_url' => APP_URL,
+            'messages_link' => $messages_link,
+            'login_link' => $login_link,
+            'register_link' => $register_link,
+            'logout_link' => $logout_link,
+            'landing_page' => $_SERVER["SCRIPT_NAME"],
+            'action' => 'storesessiondetails',
+            'initial_input_box_value' => null,
+            'page_title' => 'Sessions Demonstration',
+            'page_heading_1' => 'Sessions Demonstration',
+            'page_heading_2' => 'Enter values for storage in a session',
+            'page_heading_3' => 'Select the type of session storage to be used',
+            'info_text' => 'Your information will be stored in either a session file or in a database',
+            'messages' => $messages
+        ]);
+})->setName('messages')->add(new \M2m\Middleware\AuthMiddleware($container));
+
+
 /**
  * @param $app
  * @return array
