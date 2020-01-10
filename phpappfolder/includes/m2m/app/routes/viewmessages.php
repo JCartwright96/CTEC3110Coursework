@@ -34,7 +34,6 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
     //After any new messages have been stored, get messages from the db.
     $messages = getMessageDetails($app);
 
-    //$storage_result = storeMessageDetails($app, $cleaned_parameters, $hashed_password);
 
     $messages_link = $this->router->pathFor('messages');
     $login_link = $this->router->pathFor('login');

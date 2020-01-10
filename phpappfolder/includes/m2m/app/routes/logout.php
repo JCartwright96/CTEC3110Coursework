@@ -6,8 +6,6 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app->get('/logout', function(Request $request, Response $response)
 {
-    $sid = session_id();
-
     $session = new \RKA\Session();
 
     $session->set('logged', false);
@@ -34,11 +32,7 @@ $app->get('/logout', function(Request $request, Response $response)
             'logout_link' => $logout_link,
             'landing_page' => $_SERVER["SCRIPT_NAME"],
             'action' => 'loginvalidation',
-            'initial_input_box_value' => null,
-            'page_title' => 'Homepage',
-            'page_heading_1' => 'Login Form',
-            'page_heading_2' => 'Complete the Login form below',
-            'sid' => $sid
+            'page_title' => 'Login',
         ]);
 
 })->setName('logout');

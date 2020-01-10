@@ -23,8 +23,6 @@ $app->get('/registeruserform', function(Request $request, Response $response)
             'landing_page' => $_SERVER["SCRIPT_NAME"],
             'action' => 'registeruser',
             'initial_input_box_value' => null,
-            'page_title' => 'Homepage',
-            'page_heading_1' => 'Registration Form',
-            'page_heading_2' => 'Complete the Registration form below'
+            'page_title' => 'Registration'
         ]);
 })->setName('registeruserform');

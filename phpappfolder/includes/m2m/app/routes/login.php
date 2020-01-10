@@ -18,7 +18,7 @@ $app->post(
         $messages_link = $this->router->pathFor('messages');
         $login_link = $this->router->pathFor('login');
         $logout_link = $this->router->pathFor('logout');
-        
+
 
         if($validated_login) {
             $session = new \RKA\Session();
@@ -26,14 +26,7 @@ $app->post(
             $session->set('auto_id', $validated_login['auto_id']);
             $session->set('user_name', $validated_login['user_name']);
 
-            $session_data = [
-                'logged' => $session->get('logged'),
-                'auto_id' => $session->get('logged'),
-                'user_name' => $session->get('user_name')
-            ];
-
             return $response->withRedirect($messages_link);
-
         }
 
         else {
@@ -48,14 +41,9 @@ $app->post(
                     'logout_link' => $logout_link,
                     'register_link' => $register_link,
                     'landing_page' => $_SERVER["SCRIPT_NAME"],
-                    'page_title' => 'Homepage',
-                    'page_heading_1' => 'Login Form',
-                    'page_heading_2' => 'Complete the Login form below',
-                    'error_message' => "Incorrect Login Credentials",
+                    'page_title' => 'Login'
                 ]);
         }
-
-        //       processOutput($app, $html_output);
 
         return $html_output;
     });
