@@ -5,13 +5,6 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app->get('/registeruserform', function(Request $request, Response $response)
 {
-    $sid = session_id();
-    $session = new \RKA\Session();
-    $session_data = [
-        'logged' => $session->get('logged'),
-        'auto_id' => $session->get('logged'),
-        'user_name' => $session->get('user_name')
-    ];
     $login_link = $this->router->pathFor('login');
     $messages_link = $this->router->pathFor('messages');
     $register_link = $this->router->pathFor('registeruserform');
@@ -32,8 +25,6 @@ $app->get('/registeruserform', function(Request $request, Response $response)
             'initial_input_box_value' => null,
             'page_title' => 'Homepage',
             'page_heading_1' => 'Registration Form',
-            'page_heading_2' => 'Complete the Registration form below',
-            'sid' => $sid,
-            'session_data' => $session_data
+            'page_heading_2' => 'Complete the Registration form below'
         ]);
 })->setName('registeruserform');

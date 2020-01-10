@@ -6,17 +6,9 @@ use Doctrine\DBAL\DriverManager;
 
 $app->get('/', function(Request $request, Response $response) use ($app)
 {
-    $sid = session_id();
     $current_settings = getCurrentSettingsDetails($app);
     $current_settings = $current_settings[0];
 
-
-    $session = new \RKA\Session();
-    $session_data = [
-        'logged' => $session->get('logged'),
-        'auto_id' => $session->get('logged'),
-        'user_name' => $session->get('user_name')
-    ];
 
     $message_id = $current_settings['message_id'];
     $phone_number = $current_settings['phone_number'];
@@ -64,9 +56,6 @@ $app->get('/', function(Request $request, Response $response) use ($app)
             'page_heading_2' => 'Enter values for storage in a session',
             'page_heading_3' => 'Select the type of session storage to be used',
             'info_text' => 'Your information will be stored in either a session file or in a database',
-            'sid_text' => 'Your super secret session SID is ',
-            'sid' => $sid,
-            'session_data' => $session_data
         ]);
 })->setName('homepage');
 

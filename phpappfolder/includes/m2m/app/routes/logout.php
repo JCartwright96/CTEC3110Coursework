@@ -14,11 +14,6 @@ $app->get('/logout', function(Request $request, Response $response)
     $session->set('auto_id', null);
     $session->set('user_name', null);
 
-    $session_data = [
-        'logged' => $session->get('logged'),
-        'auto_id' => $session->get('auto_id'),
-        'user_name' => $session->get('user_name')
-    ];
 
 
     $home_link = $this->router->pathFor("homepage");
@@ -43,8 +38,7 @@ $app->get('/logout', function(Request $request, Response $response)
             'page_title' => 'Homepage',
             'page_heading_1' => 'Login Form',
             'page_heading_2' => 'Complete the Login form below',
-            'sid' => $sid,
-            'session_data' => $session_data
+            'sid' => $sid
         ]);
 
 })->setName('logout');

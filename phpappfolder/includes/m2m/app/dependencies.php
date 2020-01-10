@@ -1,5 +1,8 @@
 <?php
 
+$container['auth'] = function ($container) {
+    return new \M2m\Auth();
+};
 
 $container['view'] = function ($container) {
     $view = new \Slim\Views\Twig(
@@ -17,6 +20,7 @@ $container['view'] = function ($container) {
     $view->addExtension(new \Slim\Views\TwigExtension($router, $uri));
     $view->addExtension(new \Twig\Extension\DebugExtension());
 
+    $view->getEnvironment()->addGlobal('auth', $container->auth);
 
     return $view;
 };

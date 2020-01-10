@@ -6,16 +6,6 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app->get('/login', function(Request $request, Response $response)
 {
-
-    $session = new \RKA\Session();
-    $session_data = [
-        'logged' => $session->get('logged'),
-        'auto_id' => $session->get('logged'),
-        'user_name' => $session->get('user_name')
-    ];
-
-    $sid = session_id();
-
     $home_link = $this->router->pathFor("homepage");
     $login_link = $this->router->pathFor('login');
     $messages_link = $this->router->pathFor('messages');
@@ -37,9 +27,7 @@ $app->get('/login', function(Request $request, Response $response)
             'initial_input_box_value' => null,
             'page_title' => 'Homepage',
             'page_heading_1' => 'Login Form',
-            'page_heading_2' => 'Complete the Login form below',
-            'sid' => $sid,
-            'session_data' => $session_data
+            'page_heading_2' => 'Complete the Login form below'
         ]);
 
 })->setName('login');

@@ -7,13 +7,7 @@ use Doctrine\DBAL\DriverManager;
 
 $app->get('/messages', function(Request $request, Response $response) use ($app)
 {
-    $sid = session_id();
-    $session = new \RKA\Session();
-    $session_data = [
-        'logged' => $session->get('logged'),
-        'auto_id' => $session->get('logged'),
-        'user_name' => $session->get('user_name')
-    ];
+
     $messages = peekMessages($app);
 
     foreach ($messages as $message) {
@@ -64,10 +58,7 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
             'page_heading_2' => 'Enter values for storage in a session',
             'page_heading_3' => 'Select the type of session storage to be used',
             'info_text' => 'Your information will be stored in either a session file or in a database',
-            'sid_text' => 'Your super secret session SID is ',
-            'sid' => $sid,
-            'messages' => $messages,
-            'session_data' => $session_data
+            'messages' => $messages
         ]);
 })->setName('messages');
 

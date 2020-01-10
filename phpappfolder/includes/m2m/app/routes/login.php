@@ -18,7 +18,7 @@ $app->post(
         $messages_link = $this->router->pathFor('messages');
         $login_link = $this->router->pathFor('login');
         $logout_link = $this->router->pathFor('logout');
-        $sid = session_id();
+        
 
         if($validated_login) {
             $session = new \RKA\Session();
