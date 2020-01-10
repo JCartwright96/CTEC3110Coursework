@@ -32,19 +32,8 @@ $app->post(
                 'user_name' => $session->get('user_name')
             ];
 
-            $html_output = $this->view->render($response,
-                'homepage.html.twig',
-                [
-                    'css_path' => CSS_PATH,
-                    'app_url' => APP_URL,
-                    'home_link' => $home_link,
-                    'messages_link' => $messages_link,
-                    'login_link' => $login_link,
-                    'register_link' => $register_link,
-                    'landing_page' => $_SERVER["SCRIPT_NAME"],
-                    'session_data' => $session_data,
-                    'logout_link' => $logout_link,
-                ]);
+            return $response->withRedirect($messages_link);
+
         }
 
         else {

@@ -1,5 +1,8 @@
 {% extends 'layout.html.twig' %}
 {% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
     <div id="page-content-div">
         <form action="{{ action }}" method="post">
             <h2>{{ page_heading_1 }}</h2>
@@ -21,4 +24,7 @@
             </fieldset>
         </form>
     </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
