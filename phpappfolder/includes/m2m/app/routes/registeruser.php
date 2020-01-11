@@ -30,6 +30,7 @@ $app->post(
         $check = checkUser($app, $cleaned_parameters);
 
         if ($check == false) {
+            $this->logger->warning('Register form - user already exists');
             // FLASH MESSAGE HERE
             return $response->withRedirect($login_link);
         }
@@ -116,8 +117,10 @@ function storeUserDetails($app, array $cleaned_parameters, string $hashed_passwo
         $doctrine->persist($user);
         $doctrine->flush();
 
+        $this->logger->info('User was successfully stored in the database');
         $store_result = 'User data was successfully stored into the database';
     } catch (Exception $e) {
+        $this->logger->error('Problem when saving user details to the database');
         $store_result = 'There appears to have been a problem when saving your details.  Please try again later.';
     }
 

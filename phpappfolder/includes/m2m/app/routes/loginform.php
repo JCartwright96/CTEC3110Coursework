@@ -12,6 +12,8 @@ $app->get('/login', function(Request $request, Response $response)
     $logout_link = $this->router->pathFor('logout');
     $register_link = $this->router->pathFor('registeruserform');
 
+    $this->logger->info('Login page deployed');
+
     return $this->view->render($response,
         'login.html.twig',
         [

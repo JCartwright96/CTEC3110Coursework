@@ -11,7 +11,6 @@ $app->get('/', function(Request $request, Response $response) use ($app)
     $logout_link = $this->router->pathFor('logout');
     $register_link = $this->router->pathFor('registeruserform');
 
-    //$logger = $this->get(logger);
     $this->logger->info('Home page deployed');
 
     return $this->view->render($response,

@@ -42,6 +42,7 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
     $register_link = $this->router->pathFor('registeruserform');
     $logout_link = $this->router->pathFor('logout');
 
+    $this->logger->info('View messages page deployed');
 
     return $this->view->render($response,
         'messages.html.twig',

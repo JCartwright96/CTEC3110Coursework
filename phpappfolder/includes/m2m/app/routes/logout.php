@@ -20,6 +20,8 @@ $app->get('/logout', function(Request $request, Response $response)
     $messages_link = $this->router->pathFor('messages');
     $register_link = $this->router->pathFor('registeruserform');
 
+    $this->logger->info('Logout page deployed');
+
     return $this->view->render($response,
         'login.html.twig',
         [

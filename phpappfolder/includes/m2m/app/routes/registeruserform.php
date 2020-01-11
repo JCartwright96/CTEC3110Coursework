@@ -10,6 +10,7 @@ $app->get('/registeruserform', function(Request $request, Response $response)
     $register_link = $this->router->pathFor('registeruserform');
     $logout_link = $this->router->pathFor('logout');
 
+    $this->logger->info('Register page deployed');
 
     return $this->view->render($response,
         'registeruserform.html.twig',
