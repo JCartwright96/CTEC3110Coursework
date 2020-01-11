@@ -34,11 +34,18 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
     //After any new messages have been stored, get messages from the db.
     $messages = getMessageDetails($app);
 
+    $currentData = getLatestMessageDetails($app);
+
+
+
+    //retrieveTemperatureData($app);
 
     $messages_link = $this->router->pathFor('messages');
     $login_link = $this->router->pathFor('login');
     $register_link = $this->router->pathFor('registeruserform');
     $logout_link = $this->router->pathFor('logout');
+
+
     return $this->view->render($response,
         'messages.html.twig',
         [
@@ -56,7 +63,8 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
             'page_heading_2' => 'Enter values for storage in a session',
             'page_heading_3' => 'Select the type of session storage to be used',
             'info_text' => 'Your information will be stored in either a session file or in a database',
-            'messages' => $messages
+            'messages' => $messages,
+            'currentData' => $currentData
         ]);
 })->setName('messages')->add(new \M2m\Middleware\AuthMiddleware($container));
 
@@ -228,15 +236,26 @@ function storeMessageDetails($app, array $cleaned_parameters)
 }
 
 function getMessageDetails($app) {
-    $messages = [];
+    try {
+        $doctrine = $app->getContainer()->get('db');
+        //currenly gets the latest 20 messages.
+        $messages = $doctrine->getRepository(\M2m\Entity\Messages::class)->findBy(array(), array('id' => 'DESC'),20);
+        return $messages;
+    } catch (Exception $e) {
+        return false;
+    }
+}
 
-    $database_connection_settings = $app->getContainer()->get('doctrine_settings');
-    $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
-    $database_connection = DriverManager::getConnection($database_connection_settings);
+function getLatestMessageDetails($app) {
+    try {
+        $doctrine = $app->getContainer()->get('db');
+        //currenly gets the latest 20 messages.
+        $messages = $doctrine->getRepository(\M2m\Entity\Messages::class)->findBy(array(),array('id'=>'DESC'),1);
 
-    $messages = $doctrine_queries::queryGetMessageData($database_connection);
-
-    return $messages;
+        return $messages;
+    } catch (Exception $e) {
+        return false;
+    }
 }
 
 /**
@@ -282,26 +301,28 @@ function createChart($app, array $temperature_data)
 
     $temperatureDetailsChartModel = $app->getContainer()->get('TemperatureDetailsChartModel');
 
-    $temperatureDetailsChartModel->setStoredCompanyStockData($temperature_data);
+    var_dump($temperature_data);
+
+    $temperatureDetailsChartModel->setStoredTemperatureData($temperature_data);
     $temperatureDetailsChartModel->createLineChart();
     $chart_details = $temperatureDetailsChartModel->getLineChartDetails();
 
+    var_dump($chart_details);die();
     return $chart_details;
 }
 
-function retrieveTemperatureData($app, array $temperature_data)
+function retrieveTemperatureData($app, array $temperature_data = null)
 {
-    $database_wrapper = $app->getContainer()->get('databaseWrapper');
-    $sql_queries = $app->getContainer()->get('sqlQueries');
-    $companyDetailsModel = $app->getContainer()->get('companyDetailsModel');
+    try {
+        $doctrine = $app->getContainer()->get('db');
+        $user = $doctrine->getRepository(\M2m\Entity\Messages::class)->findBy(array(), array('id' => 'DESC'),20);
 
-    $settings = $app->getContainer()->get('settings');
+        var_dump($user);die();
 
-    $database_connection_settings = $settings['pdo_settings'];
-
-    $companyDetailsModel->setSqlQueries($sql_queries);
-    $companyDetailsModel->setDatabaseConnectionSettings($database_connection_settings);
-    $companyDetailsModel->setDatabaseWrapper($database_wrapper);
+        return false;
+    } catch (Exception $e) {
+        $store_result = 'There appears to have been a problem when saving your details.  Please try again later.';
+    }
 
     $company_details = $companyDetailsModel->getCompanyStockData($validated_company_symbol);
 

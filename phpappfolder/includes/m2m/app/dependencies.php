@@ -10,7 +10,7 @@ $container['view'] = function ($container) {
         $container['settings']['view']['twig'],
         [
             //'cache' => 'path/to/cache',
-            'debug' => true // This line should enable debug mode
+            'debug' => true
     ]);
 
 

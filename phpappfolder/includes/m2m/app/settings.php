@@ -29,7 +29,7 @@ $settings = [
             'template_path' => __DIR__ . '/templates/',
             'twig' => [
                 'cache' => false,
-                'debug' => false,
+                'debug' => true,
                 'auto_reload' => true,
             ],
             ],

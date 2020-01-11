@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Messages
 {
     /**
-     * @var int
+     * @var integer
      *
      * @ORM\Column(name="message_id", type="integer", nullable=false)
      * @ORM\Id
@@ -28,30 +28,30 @@ class Messages
     private $phone;
 
     /**
-     * @var int
+     * @var integer
      *
-     * @ORM\Column(name="switch_01", type="int", length=1, nullable=false)
+     * @ORM\Column(name="switch_01", type="integer", length=1, nullable=false)
      */
     private $switch_01;
 
     /**
-     * @var int
+     * @var integer
      *
-     * @ORM\Column(name="switch_02", type="int", length=1, nullable=false)
+     * @ORM\Column(name="switch_02", type="integer", length=1, nullable=false)
      */
     private $switch_02;
 
     /**
-     * @var int
+     * @var integer
      *
-     * @ORM\Column(name="switch_03", type="int", length=1, nullable=false)
+     * @ORM\Column(name="switch_03", type="integer", length=1, nullable=false)
      */
     private $switch_03;
 
     /**
-     * @var int
+     * @var integer
      *
-     * @ORM\Column(name="switch_04", type="int", length=1, nullable=false)
+     * @ORM\Column(name="switch_04", type="integer", length=1, nullable=false)
      */
     private $switch_04;
 
@@ -63,16 +63,16 @@ class Messages
     private $fan;
 
     /**
-     * @var int
+     * @var integer
      *
-     * @ORM\Column(name="heater", type="int", length=3, nullable=false)
+     * @ORM\Column(name="heater", type="integer", length=3, nullable=false)
      */
     private $heater;
 
     /**
-     * @var int
+     * @var integer
      *
-     * @ORM\Column(name="keypad", type="int", length=1, nullable=false)
+     * @ORM\Column(name="keypad", type="integer", length=1, nullable=false)
      */
     private $keypad;
 
