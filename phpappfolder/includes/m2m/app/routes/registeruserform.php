@@ -5,6 +5,8 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app->get('/registeruserform', function(Request $request, Response $response)
 {
+    $flash = $this->flash->getMessages();
+
     $login_link = $this->router->pathFor('login');
     $messages_link = $this->router->pathFor('messages');
     $register_link = $this->router->pathFor('registeruserform');
@@ -26,6 +28,7 @@ $app->get('/registeruserform', function(Request $request, Response $response)
             'initial_input_box_value' => null,
             'page_title' => 'Homepage',
             'page_heading_1' => 'Registration Form',
-            'page_heading_2' => 'Complete the Registration form below'
+            'page_heading_2' => 'Complete the Registration form below',
+            'flash' => $flash
         ]);
 })->setName('registeruserform');

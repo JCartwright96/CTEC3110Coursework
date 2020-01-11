@@ -8,6 +8,10 @@ $app->get('/logout', function(Request $request, Response $response)
 {
     $session = new \RKA\Session();
 
+    if ($session->get('logged') == true) {
+        $redirect = true;
+    }
+
     $session->set('logged', false);
     $session->set('auto_id', null);
     $session->set('user_name', null);
@@ -22,6 +26,14 @@ $app->get('/logout', function(Request $request, Response $response)
 
     $this->logger->info('Logout page deployed');
 
+
+    if (isset($redirect)) {
+        $this->flash->addMessage('info', 'User Logged Out!');
+        return $response->withRedirect($home_link);
+    }
+
+    $flash = $this->flash->getMessages();
+
     return $this->view->render($response,
         'login.html.twig',
         [
@@ -35,6 +47,7 @@ $app->get('/logout', function(Request $request, Response $response)
             'landing_page' => $_SERVER["SCRIPT_NAME"],
             'action' => 'loginvalidation',
             'page_title' => 'Login',
+            'flash' => $flash
         ]);
 
 })->setName('logout');

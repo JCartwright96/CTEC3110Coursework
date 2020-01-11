@@ -6,6 +6,8 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app->get('/login', function(Request $request, Response $response)
 {
+    $flash = $this->flash->getMessages();
+
     $home_link = $this->router->pathFor("homepage");
     $login_link = $this->router->pathFor('login');
     $messages_link = $this->router->pathFor('messages');
@@ -29,7 +31,8 @@ $app->get('/login', function(Request $request, Response $response)
             'initial_input_box_value' => null,
             'page_title' => 'Homepage',
             'page_heading_1' => 'Login Form',
-            'page_heading_2' => 'Complete the Login form below'
+            'page_heading_2' => 'Complete the Login form below',
+            'flash' => $flash
         ]);
 
 })->setName('login');

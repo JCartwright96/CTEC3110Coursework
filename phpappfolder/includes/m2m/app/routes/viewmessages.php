@@ -8,6 +8,8 @@ use Doctrine\DBAL\DriverManager;
 $app->get('/messages', function(Request $request, Response $response) use ($app)
 {
 
+    $flash = $this->flash->getMessages();
+    
     $messages = peekMessages($app);
 
     foreach ($messages as $message) {
@@ -63,7 +65,8 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
             'info_text' => 'Your information will be stored in either a session file or in a database',
             'messages' => $messages,
             'currentData' => $currentData,
-            'chart' => $chart_location
+            'chart' => $chart_location,
+            'flash' => $flash
         ]);
 })->setName('messages')->add(new \M2m\Middleware\AuthMiddleware($container));
 

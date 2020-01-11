@@ -36,7 +36,10 @@ $container['logger'] = function ($container) {
     $logger->pushHandler($file_handler);
 
     return $logger;
+};
 
+$container['flash'] = function () {
+    return new \Slim\Flash\Messages();
 };
 
 $container['db'] = function ($container) {

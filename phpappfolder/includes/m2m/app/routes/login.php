@@ -27,6 +27,8 @@ $app->post(
             $session->set('auto_id', $validated_login->getId());
             $session->set('user_name', $validated_login->getUserName());
 
+            $this->flash->addMessage('info', 'User Successfully Logged In!');
+
             return $response->withRedirect($messages_link);
         }
         else

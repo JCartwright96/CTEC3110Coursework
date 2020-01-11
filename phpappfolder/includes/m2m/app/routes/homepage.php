@@ -6,6 +6,8 @@ use Psr\Log\LoggerInterface;
 
 $app->get('/', function(Request $request, Response $response) use ($app)
 {
+    $flash = $this->flash->getMessages();
+
     $messages_link = $this->router->pathFor('messages');
     $login_link = $this->router->pathFor('login');
     $logout_link = $this->router->pathFor('logout');
@@ -24,6 +26,7 @@ $app->get('/', function(Request $request, Response $response) use ($app)
             'logout_link' => $logout_link,
             'landing_page' => $_SERVER["SCRIPT_NAME"],
             'page_title' => 'Sessions Demonstration',
+            'flash' => $flash
         ]);
 })->setName('homepage');
 

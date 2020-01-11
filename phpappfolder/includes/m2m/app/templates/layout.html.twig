@@ -34,6 +34,13 @@
         </div>
     </div>
 </div>
+<div class="container">
+    {% if flash.info %}
+    <div class="alert alert-info">
+{{ flash.info|first }}
+    </div>
+    {% endif %}
+</div>
 {% block content %}{% endblock %}
 </body>
 </html>
