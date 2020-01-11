@@ -105,6 +105,15 @@ $app->post(
         return $html_output;
     });
 
+
+/**
+ *
+ * Uses the validator class to sanitize the user input.
+ *
+ * @param $app
+ * @param $tainted_parameters
+ * @return array
+ */
 function cleanupParameters($app, $tainted_parameters)
 {
     $cleaned_parameters = [];
@@ -123,7 +132,7 @@ function cleanupParameters($app, $tainted_parameters)
 
 
 /**
- * Uses the Bcrypt library with constants from settings.php to create hashes of the entered password
+ * Uses the Bcrypt library to create password hash from the users input.
  *
  * @param $app
  * @param $password_to_hash
@@ -136,6 +145,14 @@ function hash_password($app, $password_to_hash): string
     return $hashed_password;
 }
 
+/**
+ *
+ * Checks that an existing user with the same email address doesn't exist.
+ *
+ * @param $app
+ * @param array $cleaned_parameters
+ * @return bool
+ */
 function checkUser($app, array $cleaned_parameters)
 {
     try {

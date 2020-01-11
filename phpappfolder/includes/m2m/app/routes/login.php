@@ -51,6 +51,14 @@ $app->post(
         return $html_output;
     });
 
+/**
+ *
+ * Uses the validator class to sanitize the user input.
+ *
+ * @param $app
+ * @param $tainted_parameters
+ * @return array
+ */
 function cleanupLoginParameters($app, $tainted_parameters)
 {
     $cleaned_parameters = [];
@@ -68,6 +76,14 @@ function cleanupLoginParameters($app, $tainted_parameters)
     return $cleaned_parameters;
 }
 
+/**
+ *
+ * Uses the bcryptWrapper to hash the users inputted password.
+ *
+ * @param $app
+ * @param $password_to_hash
+ * @return string
+ */
 function hash_login_password($app, $password_to_hash): string
     {
         $bcrypt_wrapper = $app->getContainer()->get('bcryptWrapper');
@@ -75,6 +91,15 @@ function hash_login_password($app, $password_to_hash): string
         return $hashed_password;
     }
 
+
+/**
+ *
+ * Function to validate the user. Checks if user exists before validating the password.
+ *
+ * @param $app
+ * @param $cleaned_parameters
+ * @return bool
+ */
 function validateLogin($app, $cleaned_parameters) {
     try {
         $doctrine = $app->getContainer()->get('db');

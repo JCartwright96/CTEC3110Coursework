@@ -1,6 +1,5 @@
 <?php
 
-
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Doctrine\DBAL\DriverManager;
@@ -8,7 +7,6 @@ use Doctrine\DBAL\DriverManager;
 $app->get('/messages', function(Request $request, Response $response) use ($app)
 {
     $flash = $this->flash->getMessages();
-
     $messages = peekMessages($app);
 
     foreach ($messages as $message) {
@@ -33,10 +31,7 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
 
     //After any new messages have been stored, get messages from the db.
     $messages = getMessageDetails($app);
-
     $currentData = getLatestMessageDetails($app);
-
-
     $chart_location = createChart($app, $messages);
 
     $messages_link = $this->router->pathFor('messages');
@@ -71,12 +66,9 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
         ]);
 })->setName('messages')->add(new \M2m\Middleware\AuthMiddleware($container));
 
-
 $app->get('/update-messages', function(Request $request, Response $response) use ($app)
 {
-
     $messages = peekMessages($app);
-
     foreach ($messages as $message) {
         libxml_use_internal_errors(true);
         $message = simplexml_load_string($message);
@@ -96,7 +88,6 @@ $app->get('/update-messages', function(Request $request, Response $response) use
                 }
             }
         }
-
     }
 
     $messages = getMessageDetails($app);
@@ -164,6 +155,14 @@ function peekMessages($app)
     return $message_data;
 }
 
+/**
+ *
+ * Uses a soap call to send a confirmation message back to the sender.
+ *
+ * @param $app
+ * @param $tainted_parameters
+ * @return array
+ */
 function sendMessage($app, $data)
 {
     $message_data = [];
@@ -192,13 +191,11 @@ function sendMessage($app, $data)
 
 /**
  *
- * Uses the Doctrine QueryBuilder API to store the sanitised user data.
+ * Stores message details using the doctrine ORM entity. Calls the send message function when completed.
  *
  * @param $app
  * @param array $cleaned_parameters
- * @param string $hashed_password
- * @return array
- * @throws \Doctrine\DBAL\DBALException
+ * @return bool|\M2m\Entity\Messages
  */
 function storeMessageDetails($app, array $cleaned_parameters)
 {
@@ -232,6 +229,14 @@ function storeMessageDetails($app, array $cleaned_parameters)
     }
 }
 
+
+/**
+ *
+ * Returns the last 20 messages stored in the database.
+ *
+ * @param $app
+ * @return bool
+ */
 function getMessageDetails($app) {
     try {
         $doctrine = $app->getContainer()->get('db');
@@ -244,6 +249,14 @@ function getMessageDetails($app) {
     }
 }
 
+
+/**
+ *
+ * Gets the latest message details.
+ *
+ * @param $app
+ * @return bool
+ */
 function getLatestMessageDetails($app) {
     try {
         $doctrine = $app->getContainer()->get('db');
@@ -258,14 +271,13 @@ function getLatestMessageDetails($app) {
 }
 
 /**
- *  Takes the tainted input from the $message_array
- *  Uses the corresponding validator and returns each parameter in a cleaned array. 
- * 
+ *
+ * Uses the validator class to sanitize message input.
+ *
  * @param $app
- * @param $tainted_parameters $message_array
- * @return array $cleaned parameters
+ * @param $tainted_parameters
+ * @return array
  */
-
 function cleanupMessageData($app, $tainted_parameters)
 {
     $cleaned_parameters = [];
@@ -294,6 +306,15 @@ function cleanupMessageData($app, $tainted_parameters)
     return $cleaned_parameters;
 }
 
+/**
+ *
+ * Function to load in the libchart library before using temperatureDetailsChartModel to create a line chart.
+ * function returns the location of the newly created chart.
+ *
+ * @param $app
+ * @param array $temperature_data
+ * @return mixed
+ */
 function createChart($app, array $temperature_data)
 {
     require_once 'libchart/classes/libchart.php';
@@ -307,6 +328,12 @@ function createChart($app, array $temperature_data)
     return $chart_details;
 }
 
+/**
+ *
+ * Function to check if a string is a json array.
+ * @param $string
+ * @return bool
+ */
 function isJson($string) {
     json_decode($string);
     return (json_last_error() == JSON_ERROR_NONE);
