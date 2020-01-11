@@ -36,6 +36,7 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
 
     $currentData = getLatestMessageDetails($app);
 
+
     $chart_location = createChart($app, $messages);
 
     $messages_link = $this->router->pathFor('messages');
@@ -65,7 +66,8 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
             'messages' => $messages,
             'currentData' => $currentData,
             'chart' => $chart_location,
-            'flash' => $flash
+            'flash' => $flash,
+            'title' => 'M2m Messages'
         ]);
 })->setName('messages')->add(new \M2m\Middleware\AuthMiddleware($container));
 

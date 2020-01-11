@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang=”en">
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="{{ css_path }}">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{{ title }}</title>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ app_url }}/bootstrap/css/bootstrap.min.css" crossorigin="anonymous">
@@ -23,6 +23,7 @@
                         <li><a href="/">Home</a></li>
                         <li><a href="{{ messages_link }}">View Messages</a></li>
                         <li><a href="{{ logout_link }}">Logout</a></li>
+                        <li style="color: #8c8c8c;">{{ auth.user.user_name }}</li>
                     {% else %}
                         <li><a href="/">Home</a></li>
                         <li><a href="{{ login_link }}">Login</a></li>

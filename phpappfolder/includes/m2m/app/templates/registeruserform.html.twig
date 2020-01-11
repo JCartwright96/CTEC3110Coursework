@@ -15,8 +15,8 @@
                 <label for="password">Enter your password:</label>
                 <input id="password" name="password" type="password" value="{{ initial_input_box_value }}" size="30" maxlength="50">
                 <br><br>
-                <label for="password">Enter your phone number:</label>
-                <input id="password" name="phone_number" type="text" value="{{ initial_input_box_value }}" size="30" maxlength="50">
+                <label for="phone">Enter your phone number:</label>
+                <input id="phone" name="phone_number" type="text" value="{{ initial_input_box_value }}" size="30" maxlength="50">
                 <br><br>
                 <label for="email">Enter your email address:</label>
                 <input id="email" name="email" type="text" value="{{ initial_input_box_value }}" size="30" maxlength="50">
@@ -25,11 +25,19 @@
                 <input type="hidden" name="{{ nameKey }}" value="{{ name }}">
                 <input type="hidden" name="{{ valueKey }}" value="{{ value }}">
 
-                <input type="submit" value="Create user account >>>">
+                <input class="submit" type="submit" value="Create user account >>>">
                 <br><br>
                 <a href="{{ login_link }}">Already registered? Click here to login</a>
             </fieldset>
         </form>
     </div>
         </div></div></div>
+
+    <div class="container">
+        <div style="text-align: right;" class="row">
+            <div class="col-sm-12">
+                <img style="padding-bottom: 40px;" src="https://www.w3.org/Icons/valid-html401">
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -39,6 +39,7 @@ $app->get('/login', function(Request $request, Response $response)
             'page_heading_2' => 'Complete the Login form below',
             'flash' => $flash,
             'nameKey' => $nameKey,
+            'title' => 'M2m Login',
             'valueKey' => $valueKey,
             'name' => $name,
             'value' => $value

@@ -48,7 +48,7 @@ class TemperatureDetailsChartModel
         $end = end($this->stored_temperature_data);
         $end_id = $end->getId();
 
-        $this->chart_name = 'Message ID\'s: ' . $end_id . '-' . $start_id;
+        $this->chart_name = 'Message-IDS-' . $end_id . '-' . $start_id;
         $output_chart_name = $this->chart_name . '-linechart.png';
 
         $output_chart_location = LIB_CHART_OUTPUT_PATH;

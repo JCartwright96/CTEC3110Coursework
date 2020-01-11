@@ -24,6 +24,7 @@ $app->get('/', function(Request $request, Response $response) use ($app)
             'login_link' => $login_link,
             'register_link' => $register_link,
             'logout_link' => $logout_link,
+            'title' => 'M2m Home',
             'landing_page' => $_SERVER["SCRIPT_NAME"],
             'page_title' => 'Sessions Demonstration',
             'flash' => $flash
