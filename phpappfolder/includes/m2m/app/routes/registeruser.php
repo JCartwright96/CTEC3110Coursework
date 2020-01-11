@@ -21,9 +21,19 @@ $app->post(
     '/registeruser',
     function(Request $request, Response $response) use ($app)
     {
+        $login_link = $this->router->pathFor('login');
         $tainted_parameters = $request->getParsedBody();
         $cleaned_parameters = cleanupParameters($app, $tainted_parameters);
         $hashed_password = hash_password($app, $cleaned_parameters['password']);
+
+        //Check if user already exists
+        $check = checkUser($app, $cleaned_parameters);
+
+        if ($check == false) {
+            // FLASH MESSAGE HERE
+            return $response->withRedirect($login_link);
+        }
+
 
         $storage_result = storeUserDetails($app, $cleaned_parameters, $hashed_password);
         //FLASH MESSAGE HERE
@@ -78,6 +88,20 @@ function hash_password($app, $password_to_hash): string
     return $hashed_password;
 }
 
+function checkUser($app, array $cleaned_parameters)
+{
+    try {
+        $doctrine = $app->getContainer()->get('db');
+        $user = $doctrine->getRepository(\M2m\Entity\User::Class)->findOneByEmail($cleaned_parameters['sanitised_email']);
+
+        if (empty($user)) {
+            return true;
+        }
+        return false;
+    } catch (Exception $e) {
+        $store_result = 'There appears to have been a problem when saving your details.  Please try again later.';
+    }
+}
 
 function storeUserDetails($app, array $cleaned_parameters, string $hashed_password): string
 {
