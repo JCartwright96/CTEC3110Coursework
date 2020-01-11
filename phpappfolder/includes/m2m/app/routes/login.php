@@ -91,6 +91,7 @@ function validateLogin($app, $cleaned_parameters) {
         }
         return false;
     } catch (Exception $e) {
-        $store_result = 'There appears to have been a problem when saving your details.  Please try again later.';
+        $this->logger->error('Could not validate login');
+        return false;
     }
 }

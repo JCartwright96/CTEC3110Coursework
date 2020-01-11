@@ -147,7 +147,8 @@ function checkUser($app, array $cleaned_parameters)
         }
         return false;
     } catch (Exception $e) {
-        $store_result = 'There appears to have been a problem when saving your details.  Please try again later.';
+        $this->logger->error('Could not check user');
+        return false;
     }
 }
 
@@ -164,10 +165,9 @@ function storeUserDetails($app, array $cleaned_parameters, string $hashed_passwo
         $doctrine->persist($user);
         $doctrine->flush();
 
-
         return $user;
     } catch (Exception $e) {
-
+        $this->logger->error('Could not store user details');
         $store_result = false;
     }
 

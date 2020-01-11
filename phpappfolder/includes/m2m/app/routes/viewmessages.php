@@ -227,6 +227,7 @@ function storeMessageDetails($app, array $cleaned_parameters)
 
         return $message;
     } catch (Exception $e) {
+        $this->logger->error('Could not store message details');
         return false;
     }
 }
@@ -238,6 +239,7 @@ function getMessageDetails($app) {
         $messages = $doctrine->getRepository(\M2m\Entity\Messages::class)->findBy(array(), array('id' => 'DESC'),20);
         return $messages;
     } catch (Exception $e) {
+        $this->logger->error('Could not get message details');
         return false;
     }
 }
@@ -250,6 +252,7 @@ function getLatestMessageDetails($app) {
 
         return $messages;
     } catch (Exception $e) {
+        $this->logger->error('Could not get latest message details');
         return false;
     }
 }
@@ -302,24 +305,6 @@ function createChart($app, array $temperature_data)
     $chart_details = $temperatureDetailsChartModel->getLineChartDetails();
 
     return $chart_details;
-}
-
-function retrieveTemperatureData($app, array $temperature_data = null)
-{
-    try {
-        $doctrine = $app->getContainer()->get('db');
-        $user = $doctrine->getRepository(\M2m\Entity\Messages::class)->findBy(array(), array('id' => 'DESC'),20);
-
-        var_dump($user);die();
-
-        return false;
-    } catch (Exception $e) {
-        $store_result = 'There appears to have been a problem when saving your details.  Please try again later.';
-    }
-
-    $company_details = $companyDetailsModel->getCompanyStockData($validated_company_symbol);
-
-    return $company_details;
 }
 
 function isJson($string) {
