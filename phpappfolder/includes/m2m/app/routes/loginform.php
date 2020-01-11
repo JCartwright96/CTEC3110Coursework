@@ -14,6 +14,11 @@ $app->get('/login', function(Request $request, Response $response)
     $logout_link = $this->router->pathFor('logout');
     $register_link = $this->router->pathFor('registeruserform');
 
+    $nameKey = $this->csrf->getTokenNameKey();
+    $valueKey = $this->csrf->getTokenValueKey();
+    $name = $request->getAttribute($nameKey);
+    $value = $request->getAttribute($valueKey);
+
     $this->logger->info('Login page deployed');
 
     return $this->view->render($response,
@@ -32,7 +37,11 @@ $app->get('/login', function(Request $request, Response $response)
             'page_title' => 'Homepage',
             'page_heading_1' => 'Login Form',
             'page_heading_2' => 'Complete the Login form below',
-            'flash' => $flash
+            'flash' => $flash,
+            'nameKey' => $nameKey,
+            'valueKey' => $valueKey,
+            'name' => $name,
+            'value' => $value
         ]);
 
 })->setName('login');

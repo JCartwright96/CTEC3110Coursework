@@ -37,6 +37,12 @@ $app->post(
 
 
         $storage_result = storeUserDetails($app, $cleaned_parameters, $hashed_password);
+        if ($storage_result) {
+            $this->logger->info('User was successfully stored in the database');
+        } else {
+            $this->logger->error('Problem when saving user details to the database');
+        }
+        
         //FLASH MESSAGE HERE
 
         $messages_link = $this->router->pathFor('messages');
@@ -104,7 +110,7 @@ function checkUser($app, array $cleaned_parameters)
     }
 }
 
-function storeUserDetails($app, array $cleaned_parameters, string $hashed_password): string
+function storeUserDetails($app, array $cleaned_parameters, string $hashed_password)
 {
     try {
         $user = new \M2m\Entity\User();
@@ -117,11 +123,11 @@ function storeUserDetails($app, array $cleaned_parameters, string $hashed_passwo
         $doctrine->persist($user);
         $doctrine->flush();
 
-        $this->logger->info('User was successfully stored in the database');
-        $store_result = 'User data was successfully stored into the database';
+
+        $store_result = true;
     } catch (Exception $e) {
-        $this->logger->error('Problem when saving user details to the database');
-        $store_result = 'There appears to have been a problem when saving your details.  Please try again later.';
+
+        $store_result = false;
     }
 
     return $store_result;

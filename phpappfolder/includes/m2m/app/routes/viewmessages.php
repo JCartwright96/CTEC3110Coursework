@@ -7,9 +7,8 @@ use Doctrine\DBAL\DriverManager;
 
 $app->get('/messages', function(Request $request, Response $response) use ($app)
 {
-
     $flash = $this->flash->getMessages();
-    
+
     $messages = peekMessages($app);
 
     foreach ($messages as $message) {

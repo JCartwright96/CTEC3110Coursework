@@ -77,3 +77,7 @@ $container['bcryptWrapper'] = function ($container) {
     $wrapper = new \M2m\BcryptWrapper();
     return $wrapper;
 };
+
+$container['csrf'] = function ($container) {
+    return new \Slim\Csrf\Guard;
+};

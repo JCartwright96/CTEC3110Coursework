@@ -22,6 +22,8 @@ require __DIR__ . '/app/dependencies.php';
 
 $app = new \Slim\App($container);
 
+$app->add($container->get('csrf'));
+
 $app->add(new \RKA\SessionMiddleware(['name' => 'MySessionName']));
 
 require __DIR__ . '/app/routes.php';
