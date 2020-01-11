@@ -24,24 +24,42 @@ $app->post(
         $login_link = $this->router->pathFor('login');
         $tainted_parameters = $request->getParsedBody();
         $cleaned_parameters = cleanupParameters($app, $tainted_parameters);
+
+
         $hashed_password = hash_password($app, $cleaned_parameters['password']);
         $messages_link = $this->router->pathFor('messages');
+        $register_link = $this->router->pathFor('registeruserform');
 
         //Check if user already exists
         $check = checkUser($app, $cleaned_parameters);
 
+        if(strlen($cleaned_parameters['password']) < 6 || strlen($cleaned_parameters['password']) > 32) {
+            $this->flash->addMessage('info', 'Password must be between 6 and 32 characters');
+            return $response->withRedirect($register_link);
+        }
+
+        if(strlen($cleaned_parameters['sanitised_username']) < 1) {
+            $this->flash->addMessage('info', 'Name cannot be empty');
+            return $response->withRedirect($register_link);
+        }
+        
+        if(strlen($cleaned_parameters['sanitised_email']) < 1) {
+            $this->flash->addMessage('info', 'Email cannot be empty');
+            return $response->withRedirect($register_link);
+        }
 
         if ($check == false) {
+
+            unset($cleaned_parameters['password']);
+            $session = new \RKA\Session();
+            $session->set('register_data', $cleaned_parameters);
+
             $this->logger->warning('Register form - users already exists');
             $this->flash->addMessage('info', 'A user with that email address already exists!');
             return $response->withRedirect($login_link);
         }
 
-
         $storage_result = storeUserDetails($app, $cleaned_parameters, $hashed_password);
-
-
-
 
 
         if ($storage_result != false) {

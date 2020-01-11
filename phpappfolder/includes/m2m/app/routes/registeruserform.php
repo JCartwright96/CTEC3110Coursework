@@ -5,6 +5,17 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app->get('/registeruserform', function(Request $request, Response $response)
 {
+
+    $session = new \RKA\Session();
+
+    if ($session->get('register_data') != null) {
+        $old_data = $session->get('register_data');
+        $session->set('register_data', null);
+    } else {
+        $old_data = [];
+    }
+
+
     $flash = $this->flash->getMessages();
 
     $login_link = $this->router->pathFor('login');
@@ -39,6 +50,7 @@ $app->get('/registeruserform', function(Request $request, Response $response)
             'nameKey' => $nameKey,
             'valueKey' => $valueKey,
             'name' => $name,
-            'value' => $value
+            'value' => $value,
+            'old_data' => $old_data
         ]);
 })->setName('registeruserform');
