@@ -12,6 +12,11 @@ namespace M2m;
 class Auth
 {
 
+    /**
+     * Function to check if a session is logged in.
+     *
+     * @return bool
+     */
     public function getStatus()
     {
         $session = new \RKA\Session();
@@ -28,6 +33,12 @@ class Auth
         return false;
     }
 
+    /**
+     *
+     * Function to check if a session is logged in, returning the session data.
+     *
+     * @return array|bool
+     */
     public function user()
     {
         $session = new \RKA\Session();

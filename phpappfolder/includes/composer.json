@@ -9,6 +9,9 @@
         "slim/flash": "^0.4.0",
         "slim/csrf": "0.8.3"
     },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "3.5.3"
+    },
     "autoload": {
         "psr-4": {
             "M2m\\": "m2m/app/src"

@@ -38,7 +38,6 @@ class TemperatureDetailsChartModel
         $this->stored_temperature_data = $stored_temperature_data;
     }
 
-
     /**
      * Calls the createChartDetails and makeLineChart functions.
      */
