@@ -30,6 +30,15 @@ $container['soapWrapper'] = function ($container) {
     return $retrieve_message_data_model;
 };
 
+$container['logger'] = function ($container) {
+    $logger = new Monolog\Logger('logger');
+    $file_handler = new \Monolog\Handler\StreamHandler('../logs/app.log');
+    $logger->pushHandler($file_handler);
+
+    return $logger;
+
+};
+
 $container['db'] = function ($container) {
     $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
         $container['doctrine_settings']['meta']['entity_path'],

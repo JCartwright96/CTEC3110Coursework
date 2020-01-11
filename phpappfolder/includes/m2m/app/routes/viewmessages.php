@@ -94,10 +94,9 @@ $app->get('/update-messages', function(Request $request, Response $response) use
 
     }
 
-    //After any new messages have been stored, get messages from the db.
     $messages = getMessageDetails($app);
     $currentData = getLatestMessageDetails($app);
-    //$storage_result = storeMessageDetails($app, $cleaned_parameters, $hashed_password);
+    $chart_location = createChart($app, $messages);
 
     $messages_link = $this->router->pathFor('messages');
     $login_link = $this->router->pathFor('login');
@@ -121,7 +120,8 @@ $app->get('/update-messages', function(Request $request, Response $response) use
             'page_heading_3' => 'Select the type of session storage to be used',
             'info_text' => 'Your information will be stored in either a session file or in a database',
             'messages' => $messages,
-            'currentData' => $currentData
+            'currentData' => $currentData,
+            'chart' => $chart_location
         ]);
 })->setName('messages')->add(new \M2m\Middleware\AuthMiddleware($container));
 

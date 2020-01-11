@@ -1,103 +1,117 @@
 
-            <div class="col-sm-8">
-                {% if messages %}
+            <div class="row">
+                <div class="col-sm-6">
                     <div class="panel panel-default">
-                        <div class="panel-heading"><h4>Messages</h4></div>
+                        <div class="panel-heading">Current Settings</div>
                         <div class="panel-body">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Phone</th>
-                                    <th>Switch 1</th>
-                                    <th>Switch 2</th>
-                                    <th>Switch 3</th>
-                                    <th>Switch 4</th>
-                                    <th>Fan</th>
-                                    <th>Heater</th>
-                                    <th>Keypad</th>
-                                    <th>Received Time</th>
-                                    <th>Time Stamp</th>
-                                </tr>
-                                </thead>
+                            <table style="width: 100%;">
                                 <tbody>
-                                {% for message in messages %}
+
+                                {% for message in currentData %}
                                     <tr>
-                                        <th scope="row">{{ message.id }}</th>
-                                        <td>{{ message.phone }}</td>
-                                        <td>{{ message.switch01 }}</td>
-                                        <td>{{ message.switch02 }}</td>
-                                        <td>{{ message.switch03 }}</td>
-                                        <td>{{ message.switch04 }}</td>
-                                        <td>{{ message.fan }}</td>
-                                        <td>{{ message.heater }}</td>
-                                        <td>{{ message.keypad }}</td>
-                                        <td>{{ message.receivedtime|date('Y-m-d') }}</td>
-                                        <td>{{ message.timestamp|date('Y-m-d') }}</td>
+                                        <td>Message ID</td>
+                                        <td style="text-align: right;">{{ message.id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phone Number</td>
+                                        <td style="text-align: right;">{{ message.phone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Switch 1</td>
+                                        <td style="text-align: right;">{{ message.switch01 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Switch 2</td>
+                                        <td style="text-align: right;">{{ message.switch02 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Switch 3</td>
+                                        <td style="text-align: right;">{{ message.switch03 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Switch 4</td>
+                                        <td style="text-align: right;">{{ message.switch04 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fan</td>
+                                        <td style="text-align: right;">{{ message.fan }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Heater</td>
+                                        <td style="text-align: right;">{{ message.heater }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Keypaf</td>
+                                        <td style="text-align: right;">{{ message.keypad }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Received Time</td>
+                                        <td style="text-align: right;">{{ message.receivedtime|date('Y-m-d') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Time Added</td>
+                                        <td style="text-align: right;">{{ message.timestamp|date('Y-m-d') }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                {% endif%}
-            </div>
-            <div class="col-sm-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Current Settings</div>
-                    <div class="panel-body">
-                        <table style="width: 100%;">
-                            <tbody>
-
-                            {% for message in currentData %}
-                                <tr>
-                                    <td>Message ID</td>
-                                    <td style="text-align: right;">{{ message.id }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Phone Number</td>
-                                    <td style="text-align: right;">{{ message.phone }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Switch 1</td>
-                                    <td style="text-align: right;">{{ message.switch01 }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Switch 2</td>
-                                    <td style="text-align: right;">{{ message.switch02 }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Switch 3</td>
-                                    <td style="text-align: right;">{{ message.switch03 }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Switch 4</td>
-                                    <td style="text-align: right;">{{ message.switch04 }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Fan</td>
-                                    <td style="text-align: right;">{{ message.fan }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Heater</td>
-                                    <td style="text-align: right;">{{ message.heater }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Keypaf</td>
-                                    <td style="text-align: right;">{{ message.keypad }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Received Time</td>
-                                    <td style="text-align: right;">{{ message.receivedtime|date('Y-m-d') }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Time Added</td>
-                                    <td style="text-align: right;">{{ message.timestamp|date('Y-m-d') }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Heater Temperature</div>
+                        <div class="panel-body">
+                            <img style="width: 100%" src="{{ chart }}">
+                        </div>
                     </div>
                 </div>
             </div>
-            
+            <div class="row">
+                <div class="col-sm-12">
+                    {% if messages %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><h4>Messages</h4></div>
+                            <div class="panel-body">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Phone</th>
+                                        <th>Switch 1</th>
+                                        <th>Switch 2</th>
+                                        <th>Switch 3</th>
+                                        <th>Switch 4</th>
+                                        <th>Fan</th>
+                                        <th>Heater</th>
+                                        <th>Keypad</th>
+                                        <th>Received Time</th>
+                                        <th>Time Stamp</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for message in messages %}
+                                        <tr>
+                                            <th scope="row">{{ message.id }}</th>
+                                            <td>{{ message.phone }}</td>
+                                            <td>{{ message.switch01 }}</td>
+                                            <td>{{ message.switch02 }}</td>
+                                            <td>{{ message.switch03 }}</td>
+                                            <td>{{ message.switch04 }}</td>
+                                            <td>{{ message.fan }}</td>
+                                            <td>{{ message.heater }}</td>
+                                            <td>{{ message.keypad }}</td>
+                                            <td>{{ message.receivedtime|date('Y-m-d') }}</td>
+                                            <td>{{ message.timestamp|date('Y-m-d') }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% endif%}
+                </div>
+            </div>
+
+
+
