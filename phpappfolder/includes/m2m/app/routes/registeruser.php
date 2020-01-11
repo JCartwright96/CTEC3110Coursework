@@ -25,30 +25,44 @@ $app->post(
         $tainted_parameters = $request->getParsedBody();
         $cleaned_parameters = cleanupParameters($app, $tainted_parameters);
         $hashed_password = hash_password($app, $cleaned_parameters['password']);
+        $messages_link = $this->router->pathFor('messages');
 
         //Check if user already exists
         $check = checkUser($app, $cleaned_parameters);
 
+
         if ($check == false) {
-            $this->logger->warning('Register form - user already exists');
-            // FLASH MESSAGE HERE
+            $this->logger->warning('Register form - users already exists');
+            $this->flash->addMessage('info', 'A user with that email address already exists!');
             return $response->withRedirect($login_link);
         }
 
 
         $storage_result = storeUserDetails($app, $cleaned_parameters, $hashed_password);
-        if ($storage_result) {
+
+
+
+
+
+        if ($storage_result != false) {
             $this->logger->info('User was successfully stored in the database');
+
+            $session = new \RKA\Session();
+            $session->set('logged', true);
+            $session->set('auto_id', $storage_result->getId());
+            $session->set('user_name', $storage_result->getUserName());
+
+            $this->flash->addMessage('info', 'User Successfully Registered & Logged In!');
+
+            return $response->withRedirect($messages_link);
         } else {
             $this->logger->error('Problem when saving user details to the database');
         }
-        
-        //FLASH MESSAGE HERE
 
         $messages_link = $this->router->pathFor('messages');
         $login_link = $this->router->pathFor('login');
         $register_link = $this->router->pathFor('registeruserform');
-        $sid = session_id();
+
 
         $html_output =  $this->view->render($response,
             'homepage.html.twig',
@@ -101,7 +115,7 @@ function checkUser($app, array $cleaned_parameters)
         $doctrine = $app->getContainer()->get('db');
         $user = $doctrine->getRepository(\M2m\Entity\User::Class)->findOneByEmail($cleaned_parameters['sanitised_email']);
 
-        if (empty($user)) {
+        if ($user == null) {
             return true;
         }
         return false;
@@ -124,7 +138,7 @@ function storeUserDetails($app, array $cleaned_parameters, string $hashed_passwo
         $doctrine->flush();
 
 
-        $store_result = true;
+        return $user;
     } catch (Exception $e) {
 
         $store_result = false;
