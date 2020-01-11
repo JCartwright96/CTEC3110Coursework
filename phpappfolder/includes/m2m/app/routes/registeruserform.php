@@ -10,6 +10,7 @@ $app->get('/registeruserform', function(Request $request, Response $response)
 
     if ($session->get('register_data') != null) {
         $old_data = $session->get('register_data');
+
         $session->set('register_data', null);
     } else {
         $old_data = [];

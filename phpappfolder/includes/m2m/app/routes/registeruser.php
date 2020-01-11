@@ -34,16 +34,25 @@ $app->post(
         $check = checkUser($app, $cleaned_parameters);
 
         if(strlen($cleaned_parameters['password']) < 6 || strlen($cleaned_parameters['password']) > 32) {
+            $session = new \RKA\Session();
+            $session->set('register_data', $cleaned_parameters);
+
             $this->flash->addMessage('info', 'Password must be between 6 and 32 characters');
             return $response->withRedirect($register_link);
         }
 
         if(strlen($cleaned_parameters['sanitised_username']) < 1) {
+            $session = new \RKA\Session();
+            $session->set('register_data', $cleaned_parameters);
+
             $this->flash->addMessage('info', 'Name cannot be empty');
             return $response->withRedirect($register_link);
         }
-        
+
         if(strlen($cleaned_parameters['sanitised_email']) < 1) {
+            $session = new \RKA\Session();
+            $session->set('register_data', $cleaned_parameters);
+
             $this->flash->addMessage('info', 'Email cannot be empty');
             return $response->withRedirect($register_link);
         }
