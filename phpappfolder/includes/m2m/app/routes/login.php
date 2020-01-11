@@ -116,7 +116,8 @@ function validateLogin($app, $cleaned_parameters) {
         }
         return false;
     } catch (Exception $e) {
-        $this->logger->error('Could not validate login');
+        $logger = $app->getContainer()->get('logger');
+        $logger->error('Could not validate login');
         return false;
     }
 }

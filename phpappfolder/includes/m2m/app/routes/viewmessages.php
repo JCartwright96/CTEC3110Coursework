@@ -224,7 +224,8 @@ function storeMessageDetails($app, array $cleaned_parameters)
 
         return $message;
     } catch (Exception $e) {
-        $this->logger->error('Could not store message details');
+        $logger = $app->getContainer()->get('logger');
+        $logger->error('Could not store message details');
         return false;
     }
 }
@@ -244,7 +245,8 @@ function getMessageDetails($app) {
         $messages = $doctrine->getRepository(\M2m\Entity\Messages::class)->findBy(array(), array('id' => 'DESC'),20);
         return $messages;
     } catch (Exception $e) {
-        $this->logger->error('Could not get message details');
+        $logger = $app->getContainer()->get('logger');
+        $logger->error('Could not get message details');
         return false;
     }
 }
@@ -265,7 +267,8 @@ function getLatestMessageDetails($app) {
 
         return $messages;
     } catch (Exception $e) {
-        $this->logger->error('Could not get latest message details');
+        $logger = $app->getContainer()->get('logger');
+        $logger->error('Could not get latest message details');
         return false;
     }
 }

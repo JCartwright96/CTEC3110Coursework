@@ -184,7 +184,8 @@ function storeUserDetails($app, array $cleaned_parameters, string $hashed_passwo
 
         return $user;
     } catch (Exception $e) {
-        $this->logger->error('Could not store user details');
+        $logger = $app->getContainer()->get('logger');
+        $logger->error('Could not store user details');
         $store_result = false;
     }
 
