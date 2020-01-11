@@ -17,7 +17,8 @@ $script_path = implode('/', $arr_script_filename) . '/';
 define ('LIB_CHART_OUTPUT_PATH', 'media/charts/');
 define ('LIB_CHART_FILE_PATH', $script_path);
 define ('LIB_CHART_CLASS_PATH', 'libchart/classes/');
-
+define('LANDING_PAGE', $_SERVER['SCRIPT_NAME']);
+define('DIRSEP', DIRECTORY_SEPARATOR);
 $settings = [
     "settings" => [
         'determineRouteBeforeAppMiddleware' => false,

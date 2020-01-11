@@ -56,7 +56,10 @@ $container['validator'] = function ($container) {
     return $validator;
 };
 
-
+$container['temperatureDetailsChartModel'] = function ($container) {
+    $model = new \M2m\TemperatureDetailsChartModel();
+    return $model;
+};
 
 $container['bcryptWrapper'] = function ($container) {
     $wrapper = new \M2m\BcryptWrapper();

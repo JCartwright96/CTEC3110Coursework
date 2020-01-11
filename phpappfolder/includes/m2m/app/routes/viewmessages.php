@@ -28,7 +28,6 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
                     }
                 }
             }
-
     }
 
     //After any new messages have been stored, get messages from the db.
@@ -36,9 +35,7 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
 
     $currentData = getLatestMessageDetails($app);
 
-
-
-    //retrieveTemperatureData($app);
+    $chart_location = createChart($app, $messages);
 
     $messages_link = $this->router->pathFor('messages');
     $login_link = $this->router->pathFor('login');
@@ -64,7 +61,8 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
             'page_heading_3' => 'Select the type of session storage to be used',
             'info_text' => 'Your information will be stored in either a session file or in a database',
             'messages' => $messages,
-            'currentData' => $currentData
+            'currentData' => $currentData,
+            'chart' => $chart_location
         ]);
 })->setName('messages')->add(new \M2m\Middleware\AuthMiddleware($container));
 
@@ -300,15 +298,12 @@ function createChart($app, array $temperature_data)
 {
     require_once 'libchart/classes/libchart.php';
 
-    $temperatureDetailsChartModel = $app->getContainer()->get('TemperatureDetailsChartModel');
-
-    var_dump($temperature_data);
+    $temperatureDetailsChartModel = $app->getContainer()->get('temperatureDetailsChartModel');
 
     $temperatureDetailsChartModel->setStoredTemperatureData($temperature_data);
     $temperatureDetailsChartModel->createLineChart();
     $chart_details = $temperatureDetailsChartModel->getLineChartDetails();
 
-    var_dump($chart_details);die();
     return $chart_details;
 }
 
