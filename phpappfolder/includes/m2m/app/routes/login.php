@@ -20,16 +20,17 @@ $app->post(
         $logout_link = $this->router->pathFor('logout');
 
 
-        if($validated_login) {
+        if($validated_login)
+        {
             $session = new \RKA\Session();
             $session->set('logged', true);
-            $session->set('auto_id', $validated_login['auto_id']);
-            $session->set('user_name', $validated_login['user_name']);
+            $session->set('auto_id', $validated_login->getId());
+            $session->set('user_name', $validated_login->getUserName());
 
             return $response->withRedirect($messages_link);
         }
-
-        else {
+        else
+            {
             $html_output = $this->view->render($response,
                 'login.html.twig',
                 [
@@ -73,18 +74,21 @@ function hash_login_password($app, $password_to_hash): string
     }
 
 function validateLogin($app, $cleaned_parameters) {
+    try {
+        $doctrine = $app->getContainer()->get('db');
+        $user = $doctrine->getRepository(\M2m\Entity\User::Class)->findOneByEmail($cleaned_parameters['sanitised_email']);
 
-    
-    $database_connection_settings = $app->getContainer()->get('doctrine_settings');
-    $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
-    $database_connection = DriverManager::getConnection($database_connection_settings);
-    $result = $doctrine_queries::queryCheckUserExists($database_connection, $cleaned_parameters);
+        if (!empty($user)) {
+            $verify_password = $user->getPassword();
+            $input_password = $cleaned_parameters['password'];
 
-    $input_password = $cleaned_parameters['password'];
-    $verify_password = $result['password'];
+            if(password_verify($input_password, $verify_password)) {
 
-    if(password_verify($input_password, $verify_password)) {
-        return $result;
+                return $user;
+            }
+        }
+        return false;
+    } catch (Exception $e) {
+        $store_result = 'There appears to have been a problem when saving your details.  Please try again later.';
     }
-    else return false;
 }

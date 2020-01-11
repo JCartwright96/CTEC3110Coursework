@@ -15,7 +15,6 @@
 
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Doctrine\DBAL\DriverManager;
 
 //$messages_link = $this->router->pathFor('login');
 $app->post(
@@ -23,9 +22,7 @@ $app->post(
     function(Request $request, Response $response) use ($app)
     {
         $tainted_parameters = $request->getParsedBody();
-
         $cleaned_parameters = cleanupParameters($app, $tainted_parameters);
-
         $hashed_password = hash_password($app, $cleaned_parameters['password']);
 
         $storage_result = storeUserDetails($app, $cleaned_parameters, $hashed_password);
@@ -44,19 +41,8 @@ $app->post(
                 'messages_link' => $messages_link,
                 'login_link' => $login_link,
                 'register_link' => $register_link,
-                'landing_page' => $_SERVER["SCRIPT_NAME"],
-                'action' => 'storesessiondetails',
-                'initial_input_box_value' => null,
-                'page_title' => 'Sessions Demonstration',
-                'page_heading_1' => 'Sessions Demonstration',
-                'page_heading_2' => 'Enter values for storage in a session',
-                'page_heading_3' => 'Select the type of session storage to be used',
-                'info_text' => 'Your information will be stored in either a session file or in a database',
-                'sid_text' => 'Your super secret session SID is ',
-                'sid' => $sid,
+                'landing_page' => $_SERVER["SCRIPT_NAME"]
             ]);
-
- //       processOutput($app, $html_output);
 
         return $html_output;
     });
