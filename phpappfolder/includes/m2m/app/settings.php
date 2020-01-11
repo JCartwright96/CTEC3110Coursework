@@ -10,6 +10,13 @@ ini_set("xdebug.overload_var_dump", "off");
 define ('BCRYPT_ALGO', PASSWORD_DEFAULT);
 define ('BCRYPT_COST', 12);
 
+$script_filename = $_SERVER["SCRIPT_FILENAME"];
+$arr_script_filename = explode('/' , $script_filename, '-1');
+$script_path = implode('/', $arr_script_filename) . '/';
+
+define ('LIB_CHART_OUTPUT_PATH', 'media/charts/');
+define ('LIB_CHART_FILE_PATH', $script_path);
+define ('LIB_CHART_CLASS_PATH', 'libchart/classes/');
 
 $settings = [
     "settings" => [
@@ -28,6 +35,12 @@ $settings = [
             ],
     ],
     'doctrine_settings' => [
+        'meta' => [
+            'entity_path' => [ __DIR__ . '/src/Entity' ],
+            'auto_generate_proxies' => true,
+            'proxy_dir' => __DIR__ . '/var/cache/proxies',
+            'cache' => null,
+        ],
         'driver' => 'pdo_mysql',
         'host' => '127.0.0.1',
         'dbname' => 'm2m',

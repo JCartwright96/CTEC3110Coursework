@@ -29,6 +29,7 @@ $app->post(
         $hashed_password = hash_password($app, $cleaned_parameters['password']);
 
         $storage_result = storeUserDetails($app, $cleaned_parameters, $hashed_password);
+        //FLASH MESSAGE HERE
 
         $messages_link = $this->router->pathFor('messages');
         $login_link = $this->router->pathFor('login');
@@ -92,37 +93,23 @@ function hash_password($app, $password_to_hash): string
 }
 
 
-
-/**
- *
- * Uses the Doctrine QueryBuilder API to store the sanitised user data.
- *
- * @param $app
- * @param array $cleaned_parameters
- * @param string $hashed_password
- * @return array
- * @throws \Doctrine\DBAL\DBALException
- */
 function storeUserDetails($app, array $cleaned_parameters, string $hashed_password): string
 {
-    $storage_result = [];
-    $store_result = '';
-    $database_connection_settings = $app->getContainer()->get('doctrine_settings');
-    $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
-    $database_connection = DriverManager::getConnection($database_connection_settings);
+    try {
+        $user = new \M2m\Entity\User();
+        $user->setUserName($cleaned_parameters['sanitised_username']);
+        $user->setEmail($cleaned_parameters['sanitised_email']);
+        $user->setPassword($hashed_password);
+        $user->setPhone($cleaned_parameters['sanitised_phone_number']);
 
-    $queryBuilder = $database_connection->createQueryBuilder();
+        $doctrine = $app->getContainer()->get('db');
+        $doctrine->persist($user);
+        $doctrine->flush();
 
-    $storage_result = $doctrine_queries::queryStoreUserData($queryBuilder, $cleaned_parameters, $hashed_password);
-
-    if ($storage_result['outcome'] == 1)
-    {
-        $store_result = 'User data was successfully stored using the SQL query: ' . $storage_result['sql_query'];
-    }
-    else
-    {
+        $store_result = 'User data was successfully stored into the database';
+    } catch (Exception $e) {
         $store_result = 'There appears to have been a problem when saving your details.  Please try again later.';
-
     }
+
     return $store_result;
 }

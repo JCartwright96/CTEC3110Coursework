@@ -30,6 +30,17 @@ $container['soapWrapper'] = function ($container) {
     return $retrieve_message_data_model;
 };
 
+$container['db'] = function ($container) {
+    $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+        $container['doctrine_settings']['meta']['entity_path'],
+        $container['doctrine_settings']['meta']['auto_generate_proxies'],
+        $container['doctrine_settings']['meta']['proxy_dir'],
+        $container['doctrine_settings']['meta']['cache'],
+        false
+    );
+    return \Doctrine\ORM\EntityManager::create($container['doctrine_settings'], $config);
+};
+
 $container['doctrineSqlQueries'] = function ($container) {
     $doctrine_sql_queries = new \M2m\DoctrineSqlQueries();
     return $doctrine_sql_queries;

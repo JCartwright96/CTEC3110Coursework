@@ -74,6 +74,7 @@ function hash_login_password($app, $password_to_hash): string
 
 function validateLogin($app, $cleaned_parameters) {
 
+    
     $database_connection_settings = $app->getContainer()->get('doctrine_settings');
     $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
     $database_connection = DriverManager::getConnection($database_connection_settings);

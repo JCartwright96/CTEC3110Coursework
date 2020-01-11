@@ -276,6 +276,38 @@ function cleanupMessageData($app, $tainted_parameters)
     return $cleaned_parameters;
 }
 
+function createChart($app, array $temperature_data)
+{
+    require_once 'libchart/classes/libchart.php';
+
+    $temperatureDetailsChartModel = $app->getContainer()->get('TemperatureDetailsChartModel');
+
+    $temperatureDetailsChartModel->setStoredCompanyStockData($temperature_data);
+    $temperatureDetailsChartModel->createLineChart();
+    $chart_details = $temperatureDetailsChartModel->getLineChartDetails();
+
+    return $chart_details;
+}
+
+function retrieveTemperatureData($app, array $temperature_data)
+{
+    $database_wrapper = $app->getContainer()->get('databaseWrapper');
+    $sql_queries = $app->getContainer()->get('sqlQueries');
+    $companyDetailsModel = $app->getContainer()->get('companyDetailsModel');
+
+    $settings = $app->getContainer()->get('settings');
+
+    $database_connection_settings = $settings['pdo_settings'];
+
+    $companyDetailsModel->setSqlQueries($sql_queries);
+    $companyDetailsModel->setDatabaseConnectionSettings($database_connection_settings);
+    $companyDetailsModel->setDatabaseWrapper($database_wrapper);
+
+    $company_details = $companyDetailsModel->getCompanyStockData($validated_company_symbol);
+
+    return $company_details;
+}
+
 function isJson($string) {
     json_decode($string);
     return (json_last_error() == JSON_ERROR_NONE);
