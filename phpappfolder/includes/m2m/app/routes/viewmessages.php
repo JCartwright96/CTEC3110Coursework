@@ -202,41 +202,33 @@ function sendMessage($app, $data)
  */
 function storeMessageDetails($app, array $cleaned_parameters)
 {
+    try {
+        $message = new \M2m\Entity\Messages();
+        $message->setPhone($cleaned_parameters['phone']);
+        $message->setSwitch01($cleaned_parameters['switch_1']);
+        $message->setSwitch02($cleaned_parameters['switch_2']);
+        $message->setSwitch03($cleaned_parameters['switch_3']);
+        $message->setSwitch04($cleaned_parameters['switch_4']);
+        $message->setFan($cleaned_parameters['fan']);
+        $message->setHeater($cleaned_parameters['heater']);
+        $message->setKeypad($cleaned_parameters['keypad']);
+        $message->setReceivedTime($cleaned_parameters['received_time']);
 
-    $store_result = '';
+        $doctrine = $app->getContainer()->get('db');
+        $doctrine->persist($message);
+        $doctrine->flush();
 
-    $database_connection_settings = $app->getContainer()->get('doctrine_settings');
-    $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
-    $database_connection = DriverManager::getConnection($database_connection_settings);
+        $notify_message_data = [
+            'phone_number' => $cleaned_parameters['phone'],
+            'message'   => 'Your message has been received and downloaded onto the M2M web application.'
+        ];
 
-    $queryBuilder = $database_connection->createQueryBuilder();
-    $select_result = $doctrine_queries::queryCheckMessageData($database_connection, $queryBuilder, $cleaned_parameters);
+        sendMessage($app, $notify_message_data);
 
-
-    if ($select_result == false) {
-        $storage_result = $doctrine_queries::queryStoreMessageData($queryBuilder, $cleaned_parameters);
-
-        if ($storage_result['outcome'] == 1)
-        {
-            //Send SMS recipt
-            $notify_message_data = [
-                'phone_number' => $cleaned_parameters['phone'],
-                'message'   => 'Your message has been received and downloaded onto the M2M web application.'
-            ];
-
-            sendMessage($app, $notify_message_data);
-
-
-            $store_result = 'User data was successfully stored using the SQL query: ' . $storage_result['sql_query'];
-        }
-        else
-        {
-            $store_result = 'There appears to have been a problem when saving your details.  Please try again later.';
-
-        }
+        return $message;
+    } catch (Exception $e) {
+        return false;
     }
-
-    return $store_result;
 }
 
 function getMessageDetails($app) {

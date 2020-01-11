@@ -1,6 +1,13 @@
 <?php
 
 namespace M2m;
+/**
+ *
+ * A soap wrapper class to access the EE M2m account.
+ *
+ * Class SoapWrapper
+ * @package M2m
+ */
 
 class SoapWrapper
 {
@@ -8,21 +15,20 @@ class SoapWrapper
     public function __construct(){}
     public function __destruct(){}
 
+    /**
+     *
+     * Function to create and return a soap client for M2m.
+     *
+     * @return \SoapClient|string
+     */
     public function createSoapClient()
     {
-        $soap_client_handle = false;
         $soap_client_parameters = array();
-        $exception = '';
         $wsdl = WSDL;
-
         $soap_client_parameters = ['trace' => true, 'exceptions' => true];
-
         try
         {
             $soap_client_handle = new \SoapClient($wsdl, $soap_client_parameters);
-            //var_dump($soap_client_handle->__getFunctions());
-            //var_dump($soap_client_handle->__getTypes());
-            $soap_server_connection_result = true;
         }
         catch (\SoapFault $exception)
         {
@@ -31,6 +37,18 @@ class SoapWrapper
         return $soap_client_handle;
     }
 
+
+    /**
+     *
+     * Function to perform soap calls.
+     *
+     * @param $soap_client
+     * @param $webservicefunction
+     * @param $webservice_call_parameters
+     * @param $webservice_value
+     * @param null $data
+     * @return null
+     */
     public function getSoapData($soap_client, $webservicefunction, $webservice_call_parameters, $webservice_value, $data = null)
     {
         $soap_call_result = null;

@@ -2,6 +2,13 @@
 
 namespace M2m;
 
+/**
+ * Class Auth
+ * @package M2m
+ *
+ * Class to get stored session data, used to
+ * validate if a user is signed in.
+ */
 class Auth
 {
 

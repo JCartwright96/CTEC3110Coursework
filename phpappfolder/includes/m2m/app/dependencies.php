@@ -53,11 +53,6 @@ $container['db'] = function ($container) {
     return \Doctrine\ORM\EntityManager::create($container['doctrine_settings'], $config);
 };
 
-$container['doctrineSqlQueries'] = function ($container) {
-    $doctrine_sql_queries = new \M2m\DoctrineSqlQueries();
-    return $doctrine_sql_queries;
-};
-
 $container['xmlParser'] = function ($container) {
     $model = new \M2m\XmlParser();
     return $model;

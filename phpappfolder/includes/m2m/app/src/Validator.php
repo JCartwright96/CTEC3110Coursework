@@ -2,12 +2,26 @@
 
 namespace M2m;
 
+/**
+ *
+ * A validator class to sanitize user input.
+ *
+ * Class Validator
+ * @package M2m
+ */
 class Validator
 {
     public function __construct() { }
 
     public function __destruct() { }
 
+    /**
+     *
+     * Function to sanitise a string.
+     *
+     * @param string $string_to_sanitise
+     * @return string
+     */
     public function sanitiseString(string $string_to_sanitise): string
     {
         $sanitised_string = false;
@@ -18,7 +32,14 @@ class Validator
         }
         return $sanitised_string;
     }
-    
+
+    /**
+     *
+     * Function to validate an Integer.
+     *
+     * @param int $int_to_sanitise
+     * @return int
+     */
     public function validateInt(int $int_to_sanitise): int
     {
         $validated_int = false;
@@ -31,6 +52,13 @@ class Validator
         return $validated_int;
     }
 
+    /**
+     *
+     * Function to validate a Boolean.
+     *
+     * @param bool $bool_to_validate
+     * @return bool
+     */
     public function validateBool(bool $bool_to_validate): bool
     {
         $validated_bool = false;
@@ -43,6 +71,13 @@ class Validator
         return $validated_bool;
     }
 
+    /**
+     *
+     * Function to sanitize a date time string.
+     *
+     * @param string $date_time_to_sanitise
+     * @return string
+     */
     public function validateDateTime(string $date_time_to_sanitise): string
     {
         $validated_dt = false;
@@ -60,7 +95,13 @@ class Validator
         return $validated_dt;
     }
 
-
+    /**
+     *
+     * Function to sanitize an email.
+     *
+     * @param string $email_to_sanitise
+     * @return string
+     */
     public function sanitiseEmail(string $email_to_sanitise): string
     {
         $cleaned_string = false;

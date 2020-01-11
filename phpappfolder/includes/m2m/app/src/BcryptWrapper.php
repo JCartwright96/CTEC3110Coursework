@@ -1,9 +1,7 @@
 <?php
 /**
- * Wrapper class for the PHP BCrypt library.  Takes the pain out of using the library.
+ * Wrapper class to use the PHP BCrypt library.
  *
- * @author CF Ingrams <cfi@dmu.ac.uk>
- * @copyright De Montfort University
  */
 namespace M2m;
 class BcryptWrapper
@@ -13,6 +11,13 @@ class BcryptWrapper
 
   public function __destruct(){}
 
+    /**
+     * @param $string_to_hash
+     * @return bool|string
+     *
+     * Returns a hashed password.
+     *
+     */
   public function createHashedPassword($string_to_hash)
   {
     $password_to_hash = $string_to_hash;
@@ -26,6 +31,16 @@ class BcryptWrapper
     return $bcrypt_hashed_password;
   }
 
+
+    /**
+     *
+     * Authenticate if a user inputted password matches the hashed password
+     * stored in the database.
+     *
+     * @param $string_to_check
+     * @param $stored_user_password_hash
+     * @return bool
+     */
   public function authenticatePassword($string_to_check, $stored_user_password_hash)
   {
     $user_authenticated = false;
