@@ -11,28 +11,34 @@ $app->get('/messages', function(Request $request, Response $response) use ($app)
 
     foreach ($messages as $message) {
         libxml_use_internal_errors(true);
-            $message = simplexml_load_string($message);
-            if (isset($message->message)) {
-                if (isJson($message->message)) {
-                    $message_array = (string)$message->message;
-                    $message_array = json_decode($message_array, true);
-                    if( isset( $message_array['18-3110-AF'] ) ){
-                        //THIS IS OUR MESSAGE
-                        $message_array['18-3110-AF']['phone'] = (string)$message->sourcemsisdn;
-                        $message_array['18-3110-AF']['time'] = (string)$message->receivedtime;
+        $message = simplexml_load_string($message);
+        if (isset($message->message)) {
+            if (isJson($message->message)) {
+                $message_array = (string)$message->message;
+                $message_array = json_decode($message_array, true);
+                if( isset( $message_array['18-3110-AF'] ) ){
+                    //THIS IS OUR MESSAGE
+                    $message_array['18-3110-AF']['phone'] = (string)$message->sourcemsisdn;
+                    $message_array['18-3110-AF']['time'] = (string)$message->receivedtime;
 
-                        $cleaned_parameters = cleanupMessageData($app, $message_array['18-3110-AF']);
+                    $cleaned_parameters = cleanupMessageData($app, $message_array['18-3110-AF']);
 
-                        storeMessageDetails($app, $cleaned_parameters);
-                    }
+                    storeMessageDetails($app, $cleaned_parameters);
                 }
             }
+        }
     }
 
     //After any new messages have been stored, get messages from the db.
     $messages = getMessageDetails($app);
-    $currentData = getLatestMessageDetails($app);
-    $chart_location = createChart($app, $messages);
+
+    if($messages != null) {
+        $currentData = getLatestMessageDetails($app);
+        $chart_location = createChart($app, $messages);
+    } else {
+        $currentData = [];
+        $chart_location = '';
+    }
 
     $messages_link = $this->router->pathFor('messages');
     $login_link = $this->router->pathFor('login');
@@ -199,34 +205,50 @@ function sendMessage($app, $data)
  */
 function storeMessageDetails($app, array $cleaned_parameters)
 {
-    try {
-        $message = new \M2m\Entity\Messages();
-        $message->setPhone($cleaned_parameters['phone']);
-        $message->setSwitch01($cleaned_parameters['switch_1']);
-        $message->setSwitch02($cleaned_parameters['switch_2']);
-        $message->setSwitch03($cleaned_parameters['switch_3']);
-        $message->setSwitch04($cleaned_parameters['switch_4']);
-        $message->setFan($cleaned_parameters['fan']);
-        $message->setHeater($cleaned_parameters['heater']);
-        $message->setKeypad($cleaned_parameters['keypad']);
-        $message->setReceivedTime($cleaned_parameters['received_time']);
+    $doctrine = $app->getContainer()->get('db');
+    $message_check = $doctrine->getRepository(\M2m\Entity\Messages::class)->findBy(array(
+        'phone' => $cleaned_parameters['phone'],
+        'switch_01' => $cleaned_parameters['switch_1'],
+        'switch_02' => $cleaned_parameters['switch_2'],
+        'switch_03' => $cleaned_parameters['switch_3'],
+        'switch_04' => $cleaned_parameters['switch_4'],
+        'fan' => $cleaned_parameters['fan'],
+        'heater' => $cleaned_parameters['heater'],
+        'keypad' => $cleaned_parameters['keypad'],
+        'receivedtime' => $cleaned_parameters['received_time']
+    ));
 
-        $doctrine = $app->getContainer()->get('db');
-        $doctrine->persist($message);
-        $doctrine->flush();
+    if (empty($message_check)) {
+        try {
+            $message = new \M2m\Entity\Messages();
+            $message->setPhone($cleaned_parameters['phone']);
+            $message->setSwitch01($cleaned_parameters['switch_1']);
+            $message->setSwitch02($cleaned_parameters['switch_2']);
+            $message->setSwitch03($cleaned_parameters['switch_3']);
+            $message->setSwitch04($cleaned_parameters['switch_4']);
+            $message->setFan($cleaned_parameters['fan']);
+            $message->setHeater($cleaned_parameters['heater']);
+            $message->setKeypad($cleaned_parameters['keypad']);
+            $message->setReceivedTime($cleaned_parameters['received_time']);
 
-        $notify_message_data = [
-            'phone_number' => $cleaned_parameters['phone'],
-            'message'   => 'Your message has been received and downloaded onto the M2M web application.'
-        ];
+            $doctrine = $app->getContainer()->get('db');
+            $doctrine->persist($message);
+            $doctrine->flush();
 
-        sendMessage($app, $notify_message_data);
+            $notify_message_data = [
+                'phone_number' => $cleaned_parameters['phone'],
+                'message' => 'Your message has been received and downloaded onto the M2M web application.'
+            ];
 
-        return $message;
-    } catch (Exception $e) {
-        $logger = $app->getContainer()->get('logger');
-        $logger->error('Could not store message details');
-        return false;
+            sendMessage($app, $notify_message_data);
+
+            return $message;
+        } catch (Exception $e) {
+            die($e);
+            $logger = $app->getContainer()->get('logger');
+            $logger->error('Could not store message details');
+            return false;
+        }
     }
 }
 

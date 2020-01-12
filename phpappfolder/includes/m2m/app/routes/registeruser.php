@@ -164,7 +164,7 @@ function checkUser($app, array $cleaned_parameters)
         }
         return false;
     } catch (Exception $e) {
-        $this->logger->error('Could not check user');
+        //$this->logger->error('Could not check user');
         return false;
     }
 }

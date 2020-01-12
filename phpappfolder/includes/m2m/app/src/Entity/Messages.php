@@ -77,9 +77,9 @@ class Messages
     private $keypad;
 
     /**
-     * @var datetime
+     * @var string
      *
-     * @ORM\Column(name="receivedtime", type="datetime", nullable=false)
+     * @ORM\Column(name="receivedtime", type="string", nullable=false)
      */
     private $receivedtime;
 

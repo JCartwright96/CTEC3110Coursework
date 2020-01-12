@@ -11,7 +11,7 @@ $container['view'] = function ($container) {
         [
             //'cache' => 'path/to/cache',
             'debug' => true
-    ]);
+        ]);
 
 
     // Instantiate and add Slim specific extension

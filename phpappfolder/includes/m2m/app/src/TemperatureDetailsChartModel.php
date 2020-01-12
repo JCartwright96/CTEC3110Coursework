@@ -78,6 +78,7 @@ class TemperatureDetailsChartModel
         $this->output_chart_path_and_name = LIB_CHART_FILE_PATH . $output_chart_location . $output_chart_name;
 
 
+
         if (!is_dir($output_chart_location))
         {
             mkdir($output_chart_location, 0755, true);

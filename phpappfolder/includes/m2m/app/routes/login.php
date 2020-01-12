@@ -20,6 +20,7 @@ $app->post(
         $logout_link = $this->router->pathFor('logout');
 
 
+
         if($validated_login)
         {
             $session = new \RKA\Session();
@@ -32,7 +33,7 @@ $app->post(
             return $response->withRedirect($messages_link);
         }
         else
-            {
+        {
             $html_output = $this->view->render($response,
                 'login.html.twig',
                 [
@@ -85,11 +86,11 @@ function cleanupLoginParameters($app, $tainted_parameters)
  * @return string
  */
 function hash_login_password($app, $password_to_hash): string
-    {
-        $bcrypt_wrapper = $app->getContainer()->get('bcryptWrapper');
-        $hashed_password = $bcrypt_wrapper->createHashedPassword($password_to_hash);
-        return $hashed_password;
-    }
+{
+    $bcrypt_wrapper = $app->getContainer()->get('bcryptWrapper');
+    $hashed_password = $bcrypt_wrapper->createHashedPassword($password_to_hash);
+    return $hashed_password;
+}
 
 
 /**
