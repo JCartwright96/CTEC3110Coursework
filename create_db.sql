@@ -1,17 +1,3 @@
-SET NAMES utf8mb4;
-SET TIME_ZONE='+00:00';
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-
---
--- Remove existing database, if any, and then create an empty database
---
-
-DROP DATABASE IF EXISTS `m2m`;
-
-CREATE DATABASE IF NOT EXISTS m2m COLLATE utf8_unicode_ci;
-
-USE m2m;
-
 DROP TABLE IF EXISTS `user_data`;
 DROP TABLE IF EXISTS `message_data`;
 
@@ -42,7 +28,7 @@ CREATE TABLE `message_data` (
   `fan` ENUM('forward', 'reverse') NOT NULL,
   `heater` int(3) NOT NULL,
   `keypad` int(1) NOT NULL,
-  `receivedtime` TIME NOT NULL,
+  `receivedtime` varchar(20) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY(`message_id`)
 )ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
